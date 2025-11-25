@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AccessibilityMod", "AccessibilityMod\AccessibilityMod.csproj", "{886652EA-2DE6-0829-C7B7-840ADFC77B36}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assembly-CSharp", "Decompiled\Assembly-CSharp.csproj", "{F19CF8AF-686F-162A-6DE1-28F8A884B637}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{886652EA-2DE6-0829-C7B7-840ADFC77B36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{886652EA-2DE6-0829-C7B7-840ADFC77B36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{886652EA-2DE6-0829-C7B7-840ADFC77B36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{886652EA-2DE6-0829-C7B7-840ADFC77B36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F19CF8AF-686F-162A-6DE1-28F8A884B637}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F19CF8AF-686F-162A-6DE1-28F8A884B637}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F19CF8AF-686F-162A-6DE1-28F8A884B637}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F19CF8AF-686F-162A-6DE1-28F8A884B637}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {200D6131-12EA-47A7-84A1-B6A6F4879448}
+	EndGlobalSection
+EndGlobal
