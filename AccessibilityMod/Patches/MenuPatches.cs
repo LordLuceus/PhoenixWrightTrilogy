@@ -14,6 +14,251 @@ namespace AccessibilityMod.Patches
         private static string[] _tanteiMenuOptions = new string[4];
         private static List<string> _selectOptions = new List<string>();
 
+        // Main menu tracking
+        private static int _lastSeriesTitle = -1;
+
+        #region Main Title Menu Patches
+
+        // Main title menu initialization - announce when main menu appears
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(titleSelectPlate), "playCursor")]
+        public static void TitleSelectPlate_PlayCursor_Postfix(titleSelectPlate __instance, int in_type)
+        {
+            try
+            {
+                // Check if this is the main menu (from mainTitleCtrl)
+                var mainTitle = mainTitleCtrl.instance;
+                if (mainTitle == null) return;
+
+                var field = typeof(mainTitleCtrl).GetField("select_plate_",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (field == null) return;
+
+                var selectPlate = field.GetValue(mainTitle) as titleSelectPlate;
+                if (selectPlate != __instance) return;
+
+                // Get the menu options and announce
+                string optionText = GetMainMenuOptionText(mainTitle, __instance.cursor_no);
+                if (!Core.Net35Extensions.IsNullOrWhiteSpace(optionText))
+                {
+                    int totalOptions = GetMainMenuOptionCount(mainTitle);
+                    string message = $"Main menu: {optionText} ({__instance.cursor_no + 1} of {totalOptions})";
+                    ClipboardManager.Announce(message, TextType.Menu);
+                }
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"Error in TitleSelectPlate_PlayCursor patch: {ex.Message}");
+            }
+        }
+
+        private static string GetMainMenuOptionText(mainTitleCtrl mainTitle, int index)
+        {
+            try
+            {
+                var field = typeof(mainTitleCtrl).GetField("select_text_",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (field == null) return null;
+
+                var selectText = field.GetValue(mainTitle) as titleSelectPlate.ButtonParam[][];
+                if (selectText == null) return null;
+
+                var typeField = typeof(mainTitleCtrl).GetField("select_type_",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (typeField == null) return null;
+
+                int selectType = (int)typeField.GetValue(mainTitle);
+                if (selectType < 0 || selectType >= selectText.Length) return null;
+
+                var options = selectText[selectType];
+                if (options == null || index < 0 || index >= options.Length) return null;
+
+                return options[index].message_;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static int GetMainMenuOptionCount(mainTitleCtrl mainTitle)
+        {
+            try
+            {
+                var field = typeof(mainTitleCtrl).GetField("select_text_",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (field == null) return 0;
+
+                var selectText = field.GetValue(mainTitle) as titleSelectPlate.ButtonParam[][];
+                if (selectText == null) return 0;
+
+                var typeField = typeof(mainTitleCtrl).GetField("select_type_",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (typeField == null) return 0;
+
+                int selectType = (int)typeField.GetValue(mainTitle);
+                if (selectType < 0 || selectType >= selectText.Length) return 0;
+
+                return selectText[selectType]?.Length ?? 0;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
+
+        #endregion
+
+        #region Series Selection Patches
+
+        // Series title selection - announce when entering series selection
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(seriesTitleSelectCtrl), "Play")]
+        public static void SeriesSelect_Play_Postfix(seriesTitleSelectCtrl __instance)
+        {
+            try
+            {
+                _lastSeriesTitle = -1;
+                string message = "Select game. Use left and right to choose game, then select Play Title or Select Episode.";
+                ClipboardManager.Announce(message, TextType.Menu);
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"Error in SeriesSelect_Play patch: {ex.Message}");
+            }
+        }
+
+        // Series title change - announce when changing between GS1, GS2, GS3
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(seriesTitleSelectCtrl), "changeTitle")]
+        public static void SeriesSelect_ChangeTitle_Postfix(seriesTitleSelectCtrl __instance, TitleId title_id)
+        {
+            try
+            {
+                int titleIndex = (int)title_id;
+                if (titleIndex == _lastSeriesTitle) return;
+
+                _lastSeriesTitle = titleIndex;
+                string titleName = GetGameTitleName(title_id);
+                ClipboardManager.Announce(titleName, TextType.Menu);
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"Error in SeriesSelect_ChangeTitle patch: {ex.Message}");
+            }
+        }
+
+        private static string GetGameTitleName(TitleId titleId)
+        {
+            switch (titleId)
+            {
+                case TitleId.GS1: return "Phoenix Wright: Ace Attorney";
+                case TitleId.GS2: return "Phoenix Wright: Ace Attorney - Justice for All";
+                case TitleId.GS3: return "Phoenix Wright: Ace Attorney - Trials and Tribulations";
+                default: return $"Game {(int)titleId + 1}";
+            }
+        }
+
+        #endregion
+
+        #region Chapter Jump Patches
+
+        // Chapter jump menu - announce when entering chapter selection
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(ChapterJumpCtrl), "Play")]
+        public static void ChapterJump_Play_Postfix()
+        {
+            try
+            {
+                string message = "Chapter selection. Use left and right to choose episode, up and down to choose chapter.";
+                ClipboardManager.Announce(message, TextType.Menu);
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"Error in ChapterJump_Play patch: {ex.Message}");
+            }
+        }
+
+        // Chapter jump episode change - announce episode name
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(ChapterJumpInMenuCtrl), "EpisodeDispRefresh")]
+        public static void ChapterJump_EpisodeRefresh_Postfix(ChapterJumpInMenuCtrl __instance, int position)
+        {
+            try
+            {
+                // Get episode cursor from instance
+                var nameTableField = typeof(ChapterJumpInMenuCtrl).GetField("name_table",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (nameTableField == null) return;
+
+                var nameTable = nameTableField.GetValue(__instance) as System.Collections.Generic.List<System.Collections.Generic.List<string>>;
+                if (nameTable == null || position < 0 || position >= nameTable.Count) return;
+
+                string episodeName = $"Episode {position + 1}";
+                ClipboardManager.Announce(episodeName, TextType.Menu);
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"Error in ChapterJump_EpisodeRefresh patch: {ex.Message}");
+            }
+        }
+
+        // GeneralSelectPlateCtrl playCursor - announce initial chapter selection
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(GeneralSelectPlateCtrl), "playCursor")]
+        public static void GeneralSelectPlate_PlayCursor_Postfix(GeneralSelectPlateCtrl __instance)
+        {
+            try
+            {
+                int cursorNo = __instance.cursor_no;
+                string optionText = GetGeneralSelectOptionText(__instance, cursorNo);
+                if (!Core.Net35Extensions.IsNullOrWhiteSpace(optionText))
+                {
+                    // Get total count
+                    var cursorNumField = typeof(GeneralSelectPlateCtrl).GetField("cursor_num_",
+                        System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    int total = cursorNumField != null ? (int)cursorNumField.GetValue(__instance) : 0;
+
+                    string message = total > 0
+                        ? $"{optionText} ({cursorNo + 1} of {total})"
+                        : optionText;
+                    ClipboardManager.Announce(message, TextType.Menu);
+                }
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"Error in GeneralSelectPlate_PlayCursor patch: {ex.Message}");
+            }
+        }
+
+        private static string GetGeneralSelectOptionText(GeneralSelectPlateCtrl selectPlate, int index)
+        {
+            try
+            {
+                var field = typeof(GeneralSelectPlateCtrl).GetField("select_list_",
+                    System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (field == null) return null;
+
+                var selectList = field.GetValue(selectPlate) as System.Collections.IList;
+                if (selectList == null || index < 0 || index >= selectList.Count) return null;
+
+                var item = selectList[index];
+                var textField = item.GetType().GetField("text_");
+                if (textField == null) return null;
+
+                var textComponent = textField.GetValue(item) as UnityEngine.UI.Text;
+                return textComponent?.text;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region Detective Menu Patches
+
         // Detective menu setup
         [HarmonyPostfix]
         [HarmonyPatch(typeof(tanteiMenu), "setMenu")]
@@ -77,6 +322,10 @@ namespace AccessibilityMod.Patches
             }
             return "Unknown";
         }
+
+        #endregion
+
+        #region Selection Plate Patches (Dialogue Choices)
 
         // Selection plate text setting (choices/talk options)
         [HarmonyPostfix]
@@ -177,5 +426,7 @@ namespace AccessibilityMod.Patches
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"Error in End patch: {ex.Message}");
             }
         }
+
+        #endregion
     }
 }
