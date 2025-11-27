@@ -13,47 +13,43 @@ namespace AccessibilityMod.Services
         private static bool _initialized = false;
 
         // GS1 sprite index to character name mapping
+        // Verified from GalleryActionStudioCtrl.CHARACTER_TABLE
         private static readonly Dictionary<int, string> GS1_NAMES = new Dictionary<int, string>
         {
+            // Main characters
             { 2, "Phoenix Wright" },
-            { 3, "Mia Fey" },
-            { 5, "Larry Butz" },
-            { 7, "Mia Fey" }, // Alternative index
-            { 9, "Judge" },
+            { 4, "Maya Fey" },
+            { 5, "Mia Fey" }, // Channeled by Maya
+            { 7, "Mia Fey" },
+            { 8, "Judge" },
+            { 9, "Miles Edgeworth" },
             { 10, "Winston Payne" },
-            { 11, "Frank Sahwit" },
-            { 12, "Cindy Stone" },
-            { 14, "April May" },
-            { 15, "Bellboy" },
-            { 16, "Marvin Grossberg" },
-            { 17, "Redd White" },
-            { 19, "Maya Fey" },
+            { 12, "Marvin Grossberg" },
+            // Episode 1-4 witnesses/characters
+            { 16, "Penny Nichols" },
+            { 17, "Wendy Oldbag" },
+            { 18, "Sal Manella" },
             { 20, "Dick Gumshoe" },
-            { 21, "Miles Edgeworth" },
-            { 23, "Lotta Hart" },
-            { 24, "Sal Manella" },
-            { 25, "Larry Butz" }, // Alternative index
-            { 26, "Will Powers" },
-            { 27, "Wendy Oldbag" },
-            { 28, "Penny Nichols" },
-            { 29, "Cody Hackins" },
-            { 30, "Dee Vasquez" },
-            { 31, "Jack Hammer" },
-            { 33, "Yanni Yogi" },
-            { 34, "Polly" },
-            { 35, "Robert Hammond" },
-            { 36, "Manfred von Karma" },
-            { 37, "Missile" },
-            { 38, "Gregory Edgeworth" },
-            { 40, "Lana Skye" },
-            { 41, "Ema Skye" },
-            { 42, "Jake Marshall" },
-            { 43, "Angel Starr" },
-            { 44, "Bruce Goodman" },
-            { 45, "Damon Gant" },
-            { 46, "Mike Meekins" },
-            { 47, "Neil Marshall" },
-            { 48, "Joe Darke" },
+            { 21, "Redd White" },
+            { 22, "April May" },
+            { 23, "Bellboy" },
+            { 24, "Dee Vasquez" },
+            { 25, "Larry Butz" },
+            { 26, "Frank Sahwit" },
+            { 27, "Will Powers" },
+            { 28, "Cody Hackins" },
+            { 31, "Lotta Hart" },
+            { 32, "Yanni Yogi" },
+            { 33, "Polly" },
+            { 34, "Manfred von Karma" },
+            // Rise from the Ashes (episode 5)
+            { 45, "Lana Skye" },
+            { 46, "Ema Skye" },
+            { 47, "Jake Marshall" },
+            { 48, "Angel Starr" },
+            { 49, "Bruce Goodman" },
+            { 50, "Damon Gant" },
+            { 51, "Mike Meekins" },
         };
 
         // GS2 sprite index to character name mapping

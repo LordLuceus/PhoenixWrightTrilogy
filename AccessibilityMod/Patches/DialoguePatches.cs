@@ -75,6 +75,12 @@ namespace AccessibilityMod.Patches
         {
             try
             {
+                // Debug: Log speaker ID to help identify correct mappings
+                if (in_name && in_name_no > 0)
+                {
+                    AccessibilityMod.Core.AccessibilityMod.Logger?.Msg($"Speaker ID: {in_name_no}");
+                }
+
                 if (in_name && in_name_no != _lastSpeakerId)
                 {
                     _lastSpeakerId = in_name_no;
