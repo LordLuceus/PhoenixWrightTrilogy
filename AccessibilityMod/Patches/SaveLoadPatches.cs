@@ -134,8 +134,12 @@ namespace AccessibilityMod.Patches
         private static FieldInfo _currentNumField;
         private static FieldInfo _availableOptionField;
         private static FieldInfo _optionTitleField;
+        private static FieldInfo _titleBackTextField;
 
         private static readonly BindingFlags NonPublicInstance = BindingFlags.NonPublic | BindingFlags.Instance;
+
+        // Tooltip delay in seconds
+        private const float TooltipDelay = 2.0f;
 
         // Hook when options menu category changes
         [HarmonyPostfix]
@@ -149,6 +153,9 @@ namespace AccessibilityMod.Patches
                 {
                     _lastCategory = categoryInt;
                     _lastOptionIndex = -1; // Reset option index when category changes
+
+                    // Cancel any pending tooltip from previous category
+                    CoroutineRunner.Instance?.CancelDelayedAnnouncement();
 
                     string categoryName = GetCategoryName(cat);
                     ClipboardManager.Announce($"Options: {categoryName}", TextType.Menu);
@@ -188,10 +195,246 @@ namespace AccessibilityMod.Patches
                     message = optionName;
 
                 ClipboardManager.Announce(message, TextType.Menu);
+
+                // Schedule delayed tooltip announcement
+                ScheduleTooltipAnnouncement(__instance);
             }
             catch (Exception ex)
             {
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"Error in Options SelectItemSet patch: {ex.Message}");
+            }
+        }
+
+        private static void ScheduleTooltipAnnouncement(optionCtrl instance)
+        {
+            try
+            {
+                if (CoroutineRunner.Instance == null)
+                    return;
+
+                CoroutineRunner.Instance.ScheduleDelayedAnnouncement(
+                    TooltipDelay,
+                    () => GetTooltipText(instance),
+                    TextType.Menu
+                );
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"Error scheduling tooltip: {ex.Message}");
+            }
+        }
+
+        private static string GetTooltipText(optionCtrl instance)
+        {
+            try
+            {
+                if (_titleBackTextField == null)
+                    _titleBackTextField = typeof(optionCtrl).GetField("title_back_text_", NonPublicInstance);
+
+                if (_titleBackTextField == null)
+                    return null;
+
+                var titleBackTextList = _titleBackTextField.GetValue(instance) as List<UnityEngine.UI.Text>;
+                if (titleBackTextList == null || titleBackTextList.Count == 0)
+                    return null;
+
+                // Get the current key type for button prompts
+                string keyName = GetCurrentKeyName(instance);
+
+                // Combine both lines of tooltip text
+                string line1 = titleBackTextList.Count > 0 ? titleBackTextList[0]?.text : null;
+                string line2 = titleBackTextList.Count > 1 ? titleBackTextList[1]?.text : null;
+
+                // Replace button icon placeholders (whitespace sequences) with key name
+                if (!Net35Extensions.IsNullOrWhiteSpace(keyName))
+                {
+                    line1 = ReplaceButtonPlaceholder(line1, keyName);
+                    line2 = ReplaceButtonPlaceholder(line2, keyName);
+                }
+
+                string tooltip = "";
+                if (!Net35Extensions.IsNullOrWhiteSpace(line1))
+                    tooltip = line1;
+                if (!Net35Extensions.IsNullOrWhiteSpace(line2))
+                    tooltip = Net35Extensions.IsNullOrWhiteSpace(tooltip) ? line2 : tooltip + " " + line2;
+
+                return tooltip;
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        private static string ReplaceButtonPlaceholder(string text, string keyName)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
+
+            // First check if the original placeholder is still there (【】)
+            if (text.Contains("【】"))
+            {
+                if (!string.IsNullOrEmpty(keyName))
+                    text = text.Replace("【】", $"[{keyName}]");
+                else
+                    text = text.Replace("【】", "");
+                return text;
+            }
+
+            // The game replaces 【】 with multiple spaces to make room for an icon
+            // Full-width space: \u3000, used 3 times for CJK languages
+            // Half-width spaces used 9 times for other languages
+
+            if (string.IsNullOrEmpty(keyName))
+                return text;
+
+            // Replace sequences of full-width ideographic spaces (\u3000)
+            if (text.IndexOf('\u3000') >= 0)
+            {
+                text = System.Text.RegularExpressions.Regex.Replace(
+                    text,
+                    "[\u3000]+",
+                    $" [{keyName}] "
+                );
+            }
+
+            // Replace sequences of 3 or more regular spaces
+            // Pattern: look for 3+ consecutive spaces
+            text = System.Text.RegularExpressions.Regex.Replace(
+                text,
+                " {3,}",
+                $" [{keyName}] "
+            );
+
+            return text;
+        }
+
+        private static string GetCurrentKeyName(optionCtrl instance)
+        {
+            try
+            {
+                // Get current option index
+                int currentIndex = GetCurrentOptionIndex(instance);
+                if (currentIndex < 0)
+                    return null;
+
+                // Get begin_num_ to calculate actual OptionItem
+                var beginNumField = typeof(optionCtrl).GetField("begin_num_", NonPublicInstance);
+                if (beginNumField == null)
+                    return null;
+
+                int beginNum = (int)beginNumField.GetValue(instance);
+                int optionItemIndex = currentIndex + beginNum;
+
+                // Get KeyType for this option based on game's mapping
+                KeyType keyType = GetKeyTypeForOption(optionItemIndex);
+                if (keyType == KeyType.None)
+                    return null;
+
+                return GetKeyTypeName(keyType);
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error($"GetCurrentKeyName error: {ex.Message}");
+                return null;
+            }
+        }
+
+        // Maps OptionItem index to KeyType based on game's keyIconSet logic
+        private static KeyType GetKeyTypeForOption(int optionItemIndex)
+        {
+            // OptionItem enum values:
+            // SKIP = 3, LANGUAGE = 7, VOICE_LANG = 8
+            switch (optionItemIndex)
+            {
+                case 3: // SKIP - has B button prompt
+                    return KeyType.B;
+
+                case 7:  // LANGUAGE - has A button prompt
+                case 8:  // VOICE_LANG - has A button prompt
+                    return KeyType.A;
+
+                // Most options don't have button prompts
+                default:
+                    return KeyType.None;
+            }
+        }
+
+        private static string GetKeyTypeName(KeyType keyType)
+        {
+            // Check if using controller or keyboard
+            bool isController = keyGuideBase.keyguid_pad_;
+
+            if (isController)
+            {
+                // Controller button names (Xbox style)
+                switch (keyType)
+                {
+                    case KeyType.A: return "A";
+                    case KeyType.B: return "B";
+                    case KeyType.X: return "X";
+                    case KeyType.Y: return "Y";
+                    case KeyType.L: return "LB";
+                    case KeyType.R: return "RB";
+                    case KeyType.ZL: return "LT";
+                    case KeyType.ZR: return "RT";
+                    case KeyType.Start: return "Menu";
+                    case KeyType.Select: return "View";
+                    case KeyType.StickL: return "Left Stick";
+                    case KeyType.StickR: return "Right Stick";
+                    default: return keyType.ToString();
+                }
+            }
+            else
+            {
+                // Get keyboard binding
+                try
+                {
+                    var keyCode = padCtrl.instance.GetKeyCode(keyType);
+                    return GetKeyCodeName(keyCode);
+                }
+                catch
+                {
+                    return keyType.ToString();
+                }
+            }
+        }
+
+        private static string GetKeyCodeName(UnityEngine.KeyCode keyCode)
+        {
+            switch (keyCode)
+            {
+                case UnityEngine.KeyCode.Space: return "Space";
+                case UnityEngine.KeyCode.Return: return "Enter";
+                case UnityEngine.KeyCode.Escape: return "Escape";
+                case UnityEngine.KeyCode.Tab: return "Tab";
+                case UnityEngine.KeyCode.Backspace: return "Backspace";
+                case UnityEngine.KeyCode.Delete: return "Delete";
+                case UnityEngine.KeyCode.Insert: return "Insert";
+                case UnityEngine.KeyCode.Home: return "Home";
+                case UnityEngine.KeyCode.End: return "End";
+                case UnityEngine.KeyCode.PageUp: return "Page Up";
+                case UnityEngine.KeyCode.PageDown: return "Page Down";
+                case UnityEngine.KeyCode.UpArrow: return "Up Arrow";
+                case UnityEngine.KeyCode.DownArrow: return "Down Arrow";
+                case UnityEngine.KeyCode.LeftArrow: return "Left Arrow";
+                case UnityEngine.KeyCode.RightArrow: return "Right Arrow";
+                case UnityEngine.KeyCode.LeftShift: return "Left Shift";
+                case UnityEngine.KeyCode.RightShift: return "Right Shift";
+                case UnityEngine.KeyCode.LeftControl: return "Left Ctrl";
+                case UnityEngine.KeyCode.RightControl: return "Right Ctrl";
+                case UnityEngine.KeyCode.LeftAlt: return "Left Alt";
+                case UnityEngine.KeyCode.RightAlt: return "Right Alt";
+                default:
+                    // For letters and numbers, just return the key name
+                    string name = keyCode.ToString();
+                    // Handle "Alpha1" -> "1", etc.
+                    if (name.StartsWith("Alpha"))
+                        return name.Substring(5);
+                    // Handle "Keypad1" -> "Numpad 1", etc.
+                    if (name.StartsWith("Keypad"))
+                        return "Numpad " + name.Substring(6);
+                    return name;
             }
         }
 

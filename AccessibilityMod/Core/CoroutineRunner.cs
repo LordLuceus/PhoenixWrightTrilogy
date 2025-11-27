@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,6 +10,10 @@ namespace AccessibilityMod.Core
 
         private Coroutine _clipboardCoroutine;
         private const float ClipboardProcessInterval = 0.025f;
+
+        // Delayed announcement support
+        private Coroutine _delayedAnnouncementCoroutine;
+        private int _delayedAnnouncementId = 0;
 
         // Menu cursor tracking
         private int _lastSelectPlateCursor = -1;
@@ -312,6 +317,57 @@ namespace AccessibilityMod.Core
             {
                 return null;
             }
+        }
+
+        /// <summary>
+        /// Schedules a delayed announcement. If called again before the delay expires,
+        /// the previous announcement is cancelled.
+        /// </summary>
+        public void ScheduleDelayedAnnouncement(float delaySeconds, Func<string> getTextFunc, TextType textType)
+        {
+            // Cancel any pending delayed announcement
+            CancelDelayedAnnouncement();
+
+            _delayedAnnouncementId++;
+            _delayedAnnouncementCoroutine = StartCoroutine(
+                DelayedAnnouncementCoroutine(delaySeconds, getTextFunc, textType, _delayedAnnouncementId));
+        }
+
+        /// <summary>
+        /// Cancels any pending delayed announcement.
+        /// </summary>
+        public void CancelDelayedAnnouncement()
+        {
+            if (_delayedAnnouncementCoroutine != null)
+            {
+                StopCoroutine(_delayedAnnouncementCoroutine);
+                _delayedAnnouncementCoroutine = null;
+            }
+            _delayedAnnouncementId++;
+        }
+
+        private IEnumerator DelayedAnnouncementCoroutine(float delaySeconds, Func<string> getTextFunc, TextType textType, int announcementId)
+        {
+            yield return new WaitForSeconds(delaySeconds);
+
+            // Check if this announcement is still valid (wasn't cancelled)
+            if (announcementId == _delayedAnnouncementId)
+            {
+                try
+                {
+                    string text = getTextFunc();
+                    if (!Net35Extensions.IsNullOrWhiteSpace(text))
+                    {
+                        ClipboardManager.Announce(text, textType);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    AccessibilityMod.Logger?.Error($"Error in delayed announcement: {ex.Message}");
+                }
+            }
+
+            _delayedAnnouncementCoroutine = null;
         }
 
         public void StartClipboardProcessor()
