@@ -26,9 +26,30 @@ dotnet build -c Release
 
 ### Core Components
 
-- **AccessibilityMod.Core.AccessibilityMod**: Main MelonMod entry point. Handles initialization, keyboard input (R=repeat, I=state, [/]=hotspots, etc.)
+- **AccessibilityMod.Core.AccessibilityMod**: Main MelonMod entry point. Handles initialization and keyboard input
 - **ClipboardManager**: Queue-based text output system with duplicate prevention. Uses `CoroutineRunner` to write to `GUIUtility.systemCopyBuffer`
 - **Net35Extensions**: Polyfills for .NET 3.5 compatibility (`IsNullOrWhiteSpace`, etc.)
+- **TextCleaner**: Strips formatting tags and normalizes text for screen reader output
+
+### Keyboard Shortcuts
+
+| Key | Context | Action |
+|-----|---------|--------|
+| R | Global (except vase puzzle) | Repeat last output |
+| I | Global | Announce current state/context |
+| [ / ] | Investigation | Navigate hotspots |
+| U | Investigation | Jump to next unexamined hotspot |
+| H | Investigation | List all hotspots |
+| [ / ] | Pointing mode | Navigate target areas |
+| H | Pointing mode | List all target areas |
+| [ / ] | Luminol mode | Navigate blood evidence |
+| [ / ] | 3D Evidence | Navigate examination points |
+| [ / ] | Fingerprint mode | Navigate fingerprint locations |
+| H | Fingerprint mode | Get hint for current phase |
+| [ / ] | Video tape mode | Navigate to targets when paused |
+| H | Video tape mode | Get hint |
+| H | Vase puzzle | Get hint for current step |
+| H | Trial (not pointing) | Announce life gauge |
 
 ### Patches (Harmony)
 
@@ -38,12 +59,25 @@ All patches use `[HarmonyPostfix]` to hook into game methods:
 - **InvestigationPatches**: Hooks `inspectCtrl` for investigation mode cursor feedback
 - **TrialPatches**: Hooks `lifeGaugeCtrl.ActionLifeGauge()` for health/penalty announcements
 - **SaveLoadPatches**: Hooks `SaveLoadUICtrl`, `optionCtrl` for save/load and options menus
+- **CourtRecordPatches**: Hooks court record navigation for evidence/profiles
+- **CutscenePatches**: Handles cutscene dialogue capture
+- **LuminolPatches**: Hooks luminol spray minigame for blood detection
+- **VasePuzzlePatches**: Hooks vase puzzle state for accessibility hints
+- **FingerprintPatches**: Hooks fingerprint dusting minigame
+- **ScienceInvestigationPatches**: Hooks science investigation minigames
 
 ### Services
 
 - **CharacterNameService**: Maps sprite IDs to character names. Each game (GS1, GS2, GS3) has different sprite indices
 - **HotspotNavigator**: Parses `GSStatic.inspect_data_` to enable list-based navigation of examination points
-- **AccessibilityState**: Tracks current game mode (Investigation, Trial, Menu)
+- **AccessibilityState**: Tracks current game mode (Investigation, Trial, Menu, Luminol, VasePuzzle, Fingerprint, VideoTape, Pointing, 3DEvidence)
+- **PointingNavigator**: Navigation for court map and pointing minigames
+- **LuminolNavigator**: Blood evidence detection in luminol spray mode
+- **VasePuzzleNavigator**: Step-by-step hints for the vase puzzle minigame
+- **FingerprintNavigator**: Fingerprint dusting minigame navigation
+- **VideoTapeNavigator**: Video tape examination mode (scrubbing/targeting)
+- **Evidence3DNavigator**: 3D evidence examination hotspot navigation
+- **EvidenceDetailService**: Extracts evidence/profile details from court record
 
 ## Important Patterns
 
