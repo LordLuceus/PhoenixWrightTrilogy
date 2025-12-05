@@ -12,9 +12,21 @@ namespace AccessibilityMod.Services
     {
         private static bool _wasActive = false;
 
-        // The solution sequence - piece index for each step (all require angle_id = 0)
-        // From VasePuzzleUtil.puzzle_correct_data
-        private static readonly int[] SolutionPieceOrder = { 4, 3, 5, 0, 7, 2, 1, 6 };
+        // The solution sequence for the 8-piece puzzle - piece index for each step (all require angle_id = 0)
+        // From VasePuzzleUtil.puzzle_correct_data indices 0-7
+        private static readonly int[] SolutionPieceOrder8 = { 4, 3, 5, 0, 7, 2, 1, 6 };
+
+        // The 1-piece puzzle only has piece 0 which needs angle_id = 0
+        // From VasePuzzleUtil.puzzle_correct_data index 8
+        private static readonly int[] SolutionPieceOrder1 = { 0 };
+
+        /// <summary>
+        /// Gets the solution array for the current puzzle variant based on pieces count.
+        /// </summary>
+        private static int[] GetSolutionPieceOrder(int piecesCount)
+        {
+            return piecesCount == 1 ? SolutionPieceOrder1 : SolutionPieceOrder8;
+        }
 
         /// <summary>
         /// Checks if the vase puzzle mini-game is currently active.
@@ -69,6 +81,33 @@ namespace AccessibilityMod.Services
 
         private static void OnPuzzleStart()
         {
+            // Try to detect which puzzle variant is active
+            try
+            {
+                var piecesField = typeof(VasePuzzleMiniGame).GetField(
+                    "pieces_status_",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+
+                if (piecesField != null)
+                {
+                    var pieces =
+                        piecesField.GetValue(VasePuzzleMiniGame.instance) as PiecesStatus[];
+                    if (pieces != null && pieces.Length == 1)
+                    {
+                        ClipboardManager.Announce(
+                            "Vase puzzle, final piece. Use Q/R to rotate. Press H for hint, E to combine.",
+                            TextType.Investigation
+                        );
+                        return;
+                    }
+                }
+            }
+            catch
+            {
+                // Fall through to default message
+            }
+
             ClipboardManager.Announce(
                 "Vase puzzle. Use Left/Right to select pieces, Q/R to rotate. Press H for hint, E to combine.",
                 TextType.Investigation
@@ -138,19 +177,23 @@ namespace AccessibilityMod.Services
                     return;
                 }
 
+                // Get the solution array for this puzzle variant
+                int[] solutionPieceOrder = GetSolutionPieceOrder(pieces.Length);
+
                 // Check if puzzle is complete
-                if (puzzleStep >= SolutionPieceOrder.Length)
+                if (puzzleStep >= solutionPieceOrder.Length)
                 {
                     ClipboardManager.Announce("Puzzle complete!", TextType.Investigation);
                     return;
                 }
 
                 // Get the correct piece for this step
-                int correctPieceIndex = SolutionPieceOrder[puzzleStep];
-                int piecesRemaining = SolutionPieceOrder.Length - puzzleStep;
+                int correctPieceIndex = solutionPieceOrder[puzzleStep];
+                int piecesRemaining = solutionPieceOrder.Length - puzzleStep;
 
                 // Build the hint message
-                string hint = $"{piecesRemaining} pieces remaining. ";
+                string hint =
+                    $"{piecesRemaining} {(piecesRemaining == 1 ? "piece" : "pieces")} remaining. ";
 
                 // Check if they're on the correct piece
                 if (currentCursor == correctPieceIndex)
@@ -265,7 +308,9 @@ namespace AccessibilityMod.Services
                     return;
                 }
 
-                int piecesRemaining = SolutionPieceOrder.Length - puzzleStep;
+                // Get the solution array for this puzzle variant
+                int[] solutionPieceOrder = GetSolutionPieceOrder(pieces.Length);
+                int piecesRemaining = solutionPieceOrder.Length - puzzleStep;
                 int displayNumber = currentCursor + 1;
                 int rotation = pieces[currentCursor].angle_id * 90;
                 bool isUsed = pieces[currentCursor].used;
@@ -279,7 +324,8 @@ namespace AccessibilityMod.Services
                 {
                     state += $", rotated {rotation} degrees";
                 }
-                state += $". {piecesRemaining} pieces remaining.";
+                state +=
+                    $". {piecesRemaining} {(piecesRemaining == 1 ? "piece" : "pieces")} remaining.";
 
                 ClipboardManager.Announce(state, TextType.Investigation);
             }

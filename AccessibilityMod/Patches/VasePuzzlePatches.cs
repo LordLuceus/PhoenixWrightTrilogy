@@ -42,7 +42,7 @@ namespace AccessibilityMod.Patches
                     {
                         _lastPuzzleStep = puzzleStep;
 
-                        int totalPieces = 8; // Always 8 pieces in the puzzle
+                        int totalPieces = pieces.Length; // Use actual piece count (8 for first puzzle, 1 for second)
                         int remaining = totalPieces - puzzleStep - 1; // -1 because step hasn't incremented yet in success
 
                         if (remaining <= 0)
