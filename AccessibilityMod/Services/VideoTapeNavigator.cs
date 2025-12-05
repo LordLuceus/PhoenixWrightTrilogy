@@ -307,24 +307,45 @@ namespace AccessibilityMod.Services
             int frame = GetCurrentFrame();
 
             string hint;
-            if (atariNo == 0)
+            switch (atariNo)
             {
-                // First examination - find the lit locker
-                hint =
-                    "First viewing: Find Goodman's locker lit up (open). "
-                    + "Pause when you hear target available, press ] to select it, then E to present. "
-                    + $"Current frame: {frame}.";
-            }
-            else
-            {
-                // Second examination - find the falling object
-                // First target at ~460 is wrong, correct one appears ~490
-                hint =
-                    "Second viewing: Something falls from the locker. "
-                    + "A wrong target appears around frame 460. The correct falling object is around frame 490. "
-                    + "Fast forward with Enter past 460, pause with Backspace around 490, "
-                    + "press ] to cycle through targets until you find the falling object, then E to present. "
-                    + $"Current frame: {frame}.";
+                case 0:
+                    // First examination - find the lit locker
+                    hint =
+                        "First viewing: Find Goodman's locker lit up (open). "
+                        + "Pause when you hear target available, press ] to select it, then E to present. "
+                        + $"Current frame: {frame}.";
+                    break;
+                case 1:
+                    // Second examination - find the falling object
+                    hint =
+                        "Second viewing: Something falls from the locker. "
+                        + "A wrong target appears around frame 460. The correct falling object is around frame 490. "
+                        + "Fast forward with Enter past 460, pause with Backspace around 490, "
+                        + "press ] to cycle through targets until you find the falling object, then E to present. "
+                        + $"Current frame: {frame}.";
+                    break;
+                case 2:
+                    // Third examination
+                    hint =
+                        "Third viewing: The correct target is around frame 1360. "
+                        + "Fast forward with Enter, pause with Backspace around 1360, "
+                        + "press ] to select the target, then E to present. "
+                        + $"Current frame: {frame}.";
+                    break;
+                case 3:
+                    // Fourth examination
+                    hint =
+                        "Fourth viewing: The correct target is around frame 900. "
+                        + "Fast forward with Enter, pause with Backspace around 900, "
+                        + "press ] to select the target, then E to present. "
+                        + $"Current frame: {frame}.";
+                    break;
+                default:
+                    hint =
+                        "Pause when you hear target available, press ] to select it, then E to present. "
+                        + $"Current frame: {frame}.";
+                    break;
             }
 
             ClipboardManager.Announce(hint, TextType.Investigation);
