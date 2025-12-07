@@ -393,7 +393,7 @@ namespace AccessibilityMod.Core
             {
                 // Match the two sound effect hits from judgmentCtrl.CoroutineUSA
                 // First sound at frame 20 (~0.33s), second at frame 90 (~1.5s)
-                yield return new WaitForSeconds(0.33f);
+                yield return new WaitForSeconds(0.45f);
                 ClipboardManager.Announce("Not", TextType.Trial);
 
                 yield return new WaitForSeconds(1.17f); // 1.5s - 0.33s
