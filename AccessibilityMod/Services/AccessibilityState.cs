@@ -120,6 +120,11 @@ namespace AccessibilityMod.Services
             return DyingMessageNavigator.IsActive();
         }
 
+        public static bool IsInOrchestraMode()
+        {
+            return GalleryOrchestraNavigator.IsOrchestraActive();
+        }
+
         public static bool IsInCourtRecordMode()
         {
             try
@@ -182,6 +187,12 @@ namespace AccessibilityMod.Services
                 {
                     // Delegate to DyingMessageNavigator for detailed state
                     DyingMessageNavigator.AnnounceState();
+                    return;
+                }
+                else if (IsInOrchestraMode())
+                {
+                    // Delegate to GalleryOrchestraNavigator for detailed state
+                    GalleryOrchestraNavigator.AnnounceState();
                     return;
                 }
                 else if (IsInPointingMode())

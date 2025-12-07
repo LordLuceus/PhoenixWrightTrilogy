@@ -162,6 +162,15 @@ namespace AccessibilityMod.Core
                     VideoTapeNavigator.AnnounceHint();
                 }
             }
+            // Orchestra music player mode
+            else if (AccessibilityState.IsInOrchestraMode())
+            {
+                // F1 - Announce controls help
+                if (Input.GetKeyDown(KeyCode.F1))
+                {
+                    GalleryOrchestraNavigator.AnnounceHelp();
+                }
+            }
             // Dying message mode (GS1 Episode 5 - connect the dots)
             else if (AccessibilityState.IsInDyingMessageMode())
             {
