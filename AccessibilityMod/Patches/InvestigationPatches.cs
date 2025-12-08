@@ -174,6 +174,14 @@ namespace AccessibilityMod.Patches
                     _lastMoveCursor = currentCursor;
 
                     string locationName = GetLocationName(__instance, currentCursor);
+
+                    // Skip placeholder text that appears before actual location data loads
+                    if (
+                        Net35Extensions.IsNullOrWhiteSpace(locationName)
+                        || locationName == "New Text"
+                    )
+                        return;
+
                     ClipboardManager.Announce(locationName, TextType.Menu);
                 }
             }

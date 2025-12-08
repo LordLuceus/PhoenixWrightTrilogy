@@ -94,8 +94,10 @@ namespace AccessibilityMod.Services
             { 32, "Acro" },
             { 33, "Trilo" },
             { 34, "Money the Monkey" },
+            { 39, "Wendy Oldbag" },
             { 40, "Will Powers" },
             { 46, "Russell Berry" },
+            { 48, "PA Notice" },
         };
 
         // GS3 speaker IDs - must be filled in by playing the game

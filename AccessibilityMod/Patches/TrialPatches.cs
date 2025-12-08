@@ -29,12 +29,19 @@ namespace AccessibilityMod.Patches
                         break;
 
                     case lifeGaugeCtrl.Gauge_State.DAMAGE:
-                        AnnounceCurrentHealth();
+                        // Only announce if gauge is actually visible (not during loading)
+                        if (__instance.body_active)
+                        {
+                            AnnounceCurrentHealth();
+                        }
                         break;
 
                     case lifeGaugeCtrl.Gauge_State.UPDATE_REST:
-                        // Health value updated
-                        AnnounceCurrentHealth();
+                        // Only announce if gauge is actually visible (not during loading)
+                        if (__instance.body_active)
+                        {
+                            AnnounceCurrentHealth();
+                        }
                         break;
                 }
             }

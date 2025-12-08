@@ -104,6 +104,10 @@ namespace AccessibilityMod.Patches
         {
             try
             {
+                // Don't announce if court record isn't actually open (e.g. during game loading)
+                if (!__instance.is_open)
+                    return;
+
                 // Avoid duplicate announcements from initial open
                 if (_lastRecordCursor == in_no && _lastRecordType == in_type)
                     return;
