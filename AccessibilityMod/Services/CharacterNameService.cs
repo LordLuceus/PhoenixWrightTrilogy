@@ -138,6 +138,12 @@ namespace AccessibilityMod.Services
             { 16, "Adrian Andrews" },
             { 17, "Godot" },
             { 18, "Maggey Byrde" },
+            { 19, "Jean Armstrong" },
+            { 20, "Furio Tigre" },
+            { 21, "Viola" },
+            { 23, "Victor Kudo" },
+            { 24, "Lisa Basil" },
+            { 27, "Terry Fawles" },
             { 30, "Pearl Fey" },
             { 42, "Marvin Grossberg" },
             { 47, "Phone" },
@@ -147,6 +153,11 @@ namespace AccessibilityMod.Services
             { 51, "Announcer" },
             { 52, "Mask☆DeMasque" },
             { 54, "Buzzer" },
+            { 58, "Old Man" },
+            { 59, "Chief" },
+            { 60, "Detective" },
+            { 61, "The Tiger" },
+            { 62, "Programmer" },
         };
 
         public static void Initialize()
