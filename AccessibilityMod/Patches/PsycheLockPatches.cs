@@ -206,29 +206,5 @@ namespace AccessibilityMod.Patches
                 );
             }
         }
-
-        // Patch for when psyche-lock reappears (after backing out and selecting again)
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(GSPsylock), "PsylockDisp_redisp")]
-        public static void PsylockDisp_redisp_Postfix()
-        {
-            try
-            {
-                int remaining = GetRemainingLocks();
-                if (remaining > 0 && remaining != _lastAnnouncedLockCount)
-                {
-                    _lastAnnouncedLockCount = remaining;
-                    string lockWord = remaining == 1 ? "Psyche-Lock" : "Psyche-Locks";
-                    string message = $"{remaining} {lockWord} remaining";
-                    SpeechManager.Announce(message, TextType.Menu);
-                }
-            }
-            catch (Exception ex)
-            {
-                AccessibilityMod.Core.AccessibilityMod.Logger?.Error(
-                    $"Error in PsylockDisp_redisp patch: {ex.Message}"
-                );
-            }
-        }
     }
 }
