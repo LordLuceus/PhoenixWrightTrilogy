@@ -236,6 +236,14 @@ namespace AccessibilityMod.Patches
             }
         }
 
+        // Reset tracking before save/load UI opens so cursor position is announced
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SaveLoadUICtrl), "Open")]
+        public static void Open_Prefix()
+        {
+            _lastSlotCursor = -1;
+        }
+
         // Hook when save/load UI opens
         [HarmonyPostfix]
         [HarmonyPatch(typeof(SaveLoadUICtrl), "Open")]
@@ -247,7 +255,6 @@ namespace AccessibilityMod.Patches
                 string typeName = slotType == 0 ? "Save" : "Load";
 
                 SpeechManager.Announce($"{typeName} menu opened", TextType.Menu);
-                _lastSlotCursor = -1;
             }
             catch (Exception ex)
             {
@@ -494,6 +501,15 @@ namespace AccessibilityMod.Patches
 
         // Tooltip delay in seconds
         private const float TooltipDelay = 2.0f;
+
+        // Reset tracking before options menu opens so category is announced
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(optionCtrl), "Open")]
+        public static void OptionCtrl_Open_Prefix()
+        {
+            _lastCategory = -1;
+            _lastOptionIndex = -1;
+        }
 
         // Hook when options menu category changes
         [HarmonyPostfix]
