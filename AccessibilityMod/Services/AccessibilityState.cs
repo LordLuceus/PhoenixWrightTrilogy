@@ -246,7 +246,7 @@ namespace AccessibilityMod.Services
                 }
                 else if (CurrentMode != GameMode.Unknown)
                 {
-                    stateInfo = $"{CurrentMode} mode";
+                    stateInfo = L.Get("mode.generic", CurrentMode.ToString());
                 }
                 else
                 {

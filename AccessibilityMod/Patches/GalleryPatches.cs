@@ -30,7 +30,7 @@ namespace AccessibilityMod.Patches
             {
                 _isGalleryActive = true;
                 _lastAnnouncedIndex = -1;
-                SpeechManager.Announce("Gallery. Use up and down to select.", TextType.Menu);
+                SpeechManager.Announce(L.Get("gallery.opened"), TextType.Menu);
             }
             catch (Exception ex)
             {

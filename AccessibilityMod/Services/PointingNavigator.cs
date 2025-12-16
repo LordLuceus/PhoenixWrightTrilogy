@@ -150,7 +150,7 @@ namespace AccessibilityMod.Services
                             Index = i,
                             CenterX = centerX,
                             CenterY = centerY,
-                            Description = $"Area {i + 1} ({posDesc})",
+                            Description = L.Get("pointing.area_position", i + 1, posDesc),
                         }
                     );
                 }

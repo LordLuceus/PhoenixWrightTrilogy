@@ -9,6 +9,7 @@
     "system.initialized": "Accessibility initialized",
 
     "_section_modes": "=== Mode Names ===",
+    "mode.generic": "{0} mode",
     "mode.investigation": "Investigation mode",
     "mode.trial": "Trial mode",
     "mode.pointing": "Pointing mode",
@@ -63,6 +64,10 @@
     "navigation.x_unexamined": "{0} unexamined",
     "navigation.press_enter_examine": "Press Enter to examine",
     "navigation.use_brackets_navigate": "Use [ and ] to navigate",
+    "navigation.point_position": "Point {0} ({1})",
+    "navigation.examined_suffix": "(examined)",
+    "navigation.examined_remaining": "{0} examined, {1} remaining.",
+    "navigation.unexamined_list": "Unexamined:",
 
     "_section_investigation": "=== Investigation Mode ===",
     "investigation.mode_entry": "Investigation mode. {0} points of interest.",
@@ -70,10 +75,13 @@
     "investigation.point_at_position": "Point {0} ({1})",
     "investigation.point_examined": "examined",
     "investigation.point_unexamined": "unexamined",
+    "investigation.point_of_interest": "Point of interest",
+    "investigation.already_examined": "Already examined",
 
     "_section_pointing": "=== Pointing Mode ===",
     "pointing.mode_entry": "Pointing mode. {0} target areas.",
     "pointing.area_at_position": "Area {0} ({1})",
+    "pointing.area_position": "Area {0} ({1})",
     "pointing.not_in_mode": "Not in pointing mode",
 
     "_section_luminol": "=== Luminol Mode ===",
@@ -85,6 +93,11 @@
     "luminol.all_discovered": "Blood trace found! All traces discovered.",
     "luminol.no_traces": "No blood traces found",
     "luminol.pan_hint": "Press Q to pan if needed.",
+    "luminol.blood_trace_position": "Blood trace {0} ({1})",
+    "luminol.pan_direction_first": "Press Q to pan {0} first.",
+    "luminol.traces_remaining": "{0} of {1} blood traces remaining.",
+    "luminol.hit_more_needed": "Hit! {0} more spray(s) needed.",
+    "luminol.blood_found": "Blood trace found!",
 
     "_section_fingerprint": "=== Fingerprint Mode ===",
     "fingerprint.start": "Fingerprint examination. {0} locations to examine. Use [ and ] to navigate, Enter to examine. Press H for hint.",
@@ -105,6 +118,10 @@
     "fingerprint.no_locations": "No fingerprint locations found",
     "fingerprint.not_in_mode": "Not in fingerprint mode",
     "fingerprint.examination_state": "Fingerprint examination. Press H for hint.",
+    "fingerprint.revealed": "Fingerprint revealed! Proceeding to comparison.",
+    "fingerprint.no_powder": "No powder on fingerprint. Move cursor while pressing Enter to apply powder.",
+    "fingerprint.percent_keep_applying": "{0} percent. Keep applying powder.",
+    "fingerprint.not_enough": "Not enough powder. Keep applying.",
     "fingerprint.character.ema_skye": "Ema Skye",
     "fingerprint.character.mike_meekins": "Mike Meekins",
     "fingerprint.character.jake_marshall": "Jake Marshall",
@@ -132,6 +149,10 @@
     "vase.piece_number": "Piece {0}",
     "vase.already_placed": "(already placed)",
     "vase.rotated_degrees": "rotated {0} degrees",
+    "vase.puzzle_complete": "Final piece placed! Puzzle complete!",
+    "vase.piece_placed": "Piece placed! {0} remaining.",
+    "vase.wrong_piece": "Wrong piece or rotation. Press H for hint.",
+    "vase.piece_rotation": "Piece {0}, {1} degrees",
 
     "_section_vase_show": "=== Vase Show (Rotation) ===",
     "vase_show.start": "Unstable jar rotation puzzle. Rotate the jar to match the Blue Badger silhouette. H and N for X axis, M and B for Y axis, Q and R for Z axis. Press I for current position, G for hint, E to present.",
@@ -163,6 +184,9 @@
     "evidence_3d.hotspot_detected": "Hotspot detected, press Enter to examine",
     "evidence_3d.no_hotspot_cursor": "No hotspot under cursor",
     "evidence_3d.unable_to_read": "Unable to read 3D examination state",
+    "evidence_3d.opened": "3D examination: {0}. {1} hotspots. Use [ and ] to navigate hotspots. J to zoom in, E to zoom out.",
+    "evidence_3d.exited": "Exited 3D examination",
+    "evidence_3d.hotspot": "Hotspot",
 
     "_section_dying_message": "=== Dying Message Puzzle ===",
     "dying_message.puzzle_start": "Dying message puzzle. {0} dots. Connect dots to spell EMA. Use [ and ] to navigate dots, Enter on a dot to start a line, Enter on another dot to connect. Backspace to undo last line. Press H for hint.",
@@ -215,6 +239,7 @@
     "bug_sweeper.state": "Signal detector mode. {0}. {1}{2}",
     "bug_sweeper.checked_x_of_y_side": "Checked {0} of {1} targets on {2} side.",
     "bug_sweeper.checked_x_of_y": "Checked {0} of {1} targets.",
+    "bug_sweeper.move_to_scan": "Move cursor to scan for listening devices.",
 
     "_section_trial": "=== Trial Mode ===",
     "trial.life_gauge": "Life gauge: {0} percent",
@@ -261,6 +286,7 @@
     "gallery.action_studio": "Action Studio",
     "gallery.jazz_album": "Jazz Album",
     "gallery.piano_album": "Piano Album",
+    "gallery.opened": "Gallery. Use up and down to select.",
 
     "_section_save_load": "=== Save/Load ===",
     "save_load.save": "Save",
@@ -280,6 +306,17 @@
     "save_load.category_privacy": "Privacy",
     "save_load.unknown_option": "Unknown option",
     "save_load.key_config": "Key Config",
+
+    "_section_safe_keypad": "=== Safe Keypad ===",
+    "safe_keypad.back": "Back",
+    "safe_keypad.opened": "Safe keypad. Enter the 7-digit code.",
+    "safe_keypad.deleted": "Deleted",
+    "safe_keypad.entered": "Entered {0}",
+
+    "_section_verdict": "=== Verdict ===",
+    "verdict.not": "Not",
+    "verdict.guilty": "Guilty",
+    "verdict.guilty_letters": "G-U-I-L-T-Y",
 
     "_section_keys_keyboard": "=== Keyboard Keys ===",
     "key.space": "Space",
@@ -303,6 +340,12 @@
     "key.left_alt": "Left Alt",
     "key.right_alt": "Right Alt",
     "key.numpad_x": "Numpad {0}",
+    "key.h": "H key",
+    "key.n": "N key",
+    "key.m": "M key",
+    "key.b": "B key",
+    "key.r": "R key",
+    "key.q": "Q key",
 
     "_section_keys_gamepad": "=== Gamepad Buttons ===",
     "gamepad.lb": "LB",
@@ -342,5 +385,8 @@
     "orchestra.track": "Track {0}: {1}",
     "orchestra.playing": "Playing",
     "orchestra.stopped": "Stopped",
-    "orchestra.mode": "Mode: {0}"
+    "orchestra.mode": "Mode: {0}",
+    "orchestra.play_mode": "Play mode: {0}",
+    "orchestra.now_playing": "Now playing: {0}",
+    "orchestra.opened": "Music player. Press F1 for controls."
 }

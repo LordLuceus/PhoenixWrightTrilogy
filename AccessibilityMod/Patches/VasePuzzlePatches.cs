@@ -1,5 +1,6 @@
 using System.Reflection;
 using AccessibilityMod.Core;
+using AccessibilityMod.Services;
 using HarmonyLib;
 
 namespace AccessibilityMod.Patches
@@ -48,14 +49,14 @@ namespace AccessibilityMod.Patches
                         if (remaining <= 0)
                         {
                             SpeechManager.Announce(
-                                "Final piece placed! Puzzle complete!",
+                                L.Get("vase.puzzle_complete"),
                                 TextType.Investigation
                             );
                         }
                         else
                         {
                             SpeechManager.Announce(
-                                $"Piece placed! {remaining} remaining.",
+                                L.Get("vase.piece_placed", remaining),
                                 TextType.Investigation
                             );
                         }
@@ -102,10 +103,7 @@ namespace AccessibilityMod.Patches
                     // Proc.union_failure = 5
                     if (procId == 5)
                     {
-                        SpeechManager.Announce(
-                            "Wrong piece or rotation. Press H for hint.",
-                            TextType.Investigation
-                        );
+                        SpeechManager.Announce(L.Get("vase.wrong_piece"), TextType.Investigation);
                     }
                 }
             }
@@ -137,7 +135,7 @@ namespace AccessibilityMod.Patches
                         int displayNumber = i + 1;
                         int rotation = pieces[i].angle_id * 90;
                         SpeechManager.Announce(
-                            $"Piece {displayNumber}, {rotation} degrees",
+                            L.Get("vase.piece_rotation", displayNumber, rotation),
                             TextType.Investigation
                         );
                     }
@@ -196,7 +194,7 @@ namespace AccessibilityMod.Patches
                         int displayNumber = cursor + 1;
                         int rotation = pieces[cursor].angle_id * 90;
                         SpeechManager.Announce(
-                            $"Piece {displayNumber}, {rotation} degrees",
+                            L.Get("vase.piece_rotation", displayNumber, rotation),
                             TextType.Investigation
                         );
                     }

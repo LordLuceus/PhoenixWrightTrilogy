@@ -80,7 +80,7 @@ namespace AccessibilityMod.Services
                             CenterX = centerX,
                             CenterY = centerY,
                             IsExamined = examined,
-                            Description = $"Point {i + 1} ({posDesc})",
+                            Description = L.Get("navigation.point_position", i + 1, posDesc),
                         }
                     );
                 }
@@ -93,7 +93,7 @@ namespace AccessibilityMod.Services
                 {
                     var h = _hotspots[i];
                     string posDesc = GetPositionDescription(h.CenterX, h.CenterY);
-                    h.Description = $"Point {i + 1} ({posDesc})";
+                    h.Description = L.Get("navigation.point_position", i + 1, posDesc);
                 }
 
                 // Restore position to previously selected hotspot if it still exists
@@ -233,7 +233,7 @@ namespace AccessibilityMod.Services
             }
 
             var hotspot = _hotspots[_currentIndex];
-            string status = hotspot.IsExamined ? " (examined)" : "";
+            string status = hotspot.IsExamined ? " " + L.Get("navigation.examined_suffix") : "";
             string message = $"{hotspot.Description}{status}";
 
             SpeechManager.Announce(message, TextType.Investigation);
@@ -259,13 +259,14 @@ namespace AccessibilityMod.Services
 
             string summary =
                 L.Get("navigation.x_points", _hotspots.Count)
-                + $". {examined} examined, {unexamined} remaining.";
+                + ". "
+                + L.Get("navigation.examined_remaining", examined, unexamined);
 
             // List unexamined ones
             var unexaminedList = _hotspots.Where(h => !h.IsExamined).ToList();
             if (unexaminedList.Count > 0 && unexaminedList.Count <= 5)
             {
-                summary += " Unexamined: ";
+                summary += " " + L.Get("navigation.unexamined_list") + " ";
                 summary += string.Join(", ", unexaminedList.Select(h => h.Description).ToArray());
             }
 

@@ -152,7 +152,7 @@ namespace AccessibilityMod.Patches
                     string songTitle = GetSongTitle(__instance, index);
                     if (!Net35Extensions.IsNullOrWhiteSpace(songTitle))
                     {
-                        string announcement = $"Track {index + 1}: {songTitle}";
+                        string announcement = L.Get("orchestra.track", index + 1, songTitle);
                         SpeechManager.Announce(announcement, TextType.Menu);
                     }
                 }
@@ -227,7 +227,7 @@ namespace AccessibilityMod.Patches
                 string modeName = GetPlayModeName(mode);
                 if (!Net35Extensions.IsNullOrWhiteSpace(modeName))
                 {
-                    string announcement = $"Play mode: {modeName}";
+                    string announcement = L.Get("orchestra.play_mode", modeName);
                     SpeechManager.Announce(announcement, TextType.Menu);
                 }
             }
@@ -266,7 +266,7 @@ namespace AccessibilityMod.Patches
                 string songTitle = GetSongTitleFromAlbumData(playingData);
                 if (!Net35Extensions.IsNullOrWhiteSpace(songTitle))
                 {
-                    string announcement = $"Now playing: {songTitle}";
+                    string announcement = L.Get("orchestra.now_playing", songTitle);
                     SpeechManager.Announce(announcement, TextType.Menu);
                 }
             }
@@ -287,7 +287,7 @@ namespace AccessibilityMod.Patches
                 // Only announce manual stops
                 if (manual_select)
                 {
-                    SpeechManager.Announce("Stopped", TextType.Menu);
+                    SpeechManager.Announce(L.Get("orchestra.stopped"), TextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -310,7 +310,7 @@ namespace AccessibilityMod.Patches
             {
                 _isOrchestraActive = true;
                 ResetState();
-                SpeechManager.Announce("Music player. Press F1 for controls.", TextType.Menu);
+                SpeechManager.Announce(L.Get("orchestra.opened"), TextType.Menu);
             }
             catch (Exception ex)
             {

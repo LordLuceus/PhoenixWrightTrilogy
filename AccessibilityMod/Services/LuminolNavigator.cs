@@ -238,13 +238,15 @@ namespace AccessibilityMod.Services
                         ? " (" + L.Get("luminol.blood_trace_found") + ")"
                         : "";
 
+                    string description =
+                        L.Get("luminol.blood_trace_position", i + 1, posDesc + sideDesc) + status;
                     _hotspots.Add(
                         new HotspotInfo
                         {
                             Index = i,
                             CenterX = centerX,
                             CenterY = centerY,
-                            Description = $"Blood trace {i + 1} ({posDesc}{sideDesc}){status}",
+                            Description = description,
                             IsDiscovered = isDiscovered,
                             IsOnRightSide = isOnRightSide,
                             Bloodstain = bloodstain,
@@ -421,7 +423,7 @@ namespace AccessibilityMod.Services
                     ? L.Get("position.right")
                     : L.Get("position.left");
                 SpeechManager.Announce(
-                    $"{hotspot.Description}. Press Q to pan {scrollDir} first.",
+                    hotspot.Description + ". " + L.Get("luminol.pan_direction_first", scrollDir),
                     TextType.Investigation
                 );
             }
@@ -578,7 +580,9 @@ namespace AccessibilityMod.Services
             string scrollHint = IsScrollableBackground() ? " " + L.Get("luminol.pan_hint") : "";
             string message =
                 L.Get("mode.luminol")
-                + $". {remaining} of {total} blood traces remaining. "
+                + ". "
+                + L.Get("luminol.traces_remaining", remaining, total)
+                + " "
                 + L.Get("navigation.use_brackets_navigate")
                 + "."
                 + scrollHint;

@@ -78,11 +78,17 @@ namespace AccessibilityMod.Patches
                     {
                         case 1:
                             // Hovering over unexamined hotspot
-                            SpeechManager.Announce("Point of interest", TextType.Investigation);
+                            SpeechManager.Announce(
+                                L.Get("investigation.point_of_interest"),
+                                TextType.Investigation
+                            );
                             break;
                         case 3:
                             // Hovering over already examined hotspot
-                            SpeechManager.Announce("Already examined", TextType.Investigation);
+                            SpeechManager.Announce(
+                                L.Get("investigation.already_examined"),
+                                TextType.Investigation
+                            );
                             break;
                         // case 0: Normal cursor - don't announce
                     }

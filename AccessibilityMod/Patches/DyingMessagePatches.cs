@@ -124,16 +124,5 @@ namespace AccessibilityMod.Patches
             _wasInLineState = false;
             _lastStartIndex = -1;
         }
-
-        /// <summary>
-        /// Announce result when presenting.
-        /// </summary>
-        [HarmonyPatch(typeof(DyingMessageMiniGame), "sw_die_mes_thrust")]
-        [HarmonyPostfix]
-        public static void OnThrust(DyingMessageMiniGame __instance)
-        {
-            // This is called during the thrust/present animation
-            // The actual result check happens in _checkDieMessage
-        }
     }
 }

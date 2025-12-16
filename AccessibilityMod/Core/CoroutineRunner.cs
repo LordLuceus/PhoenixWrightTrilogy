@@ -391,15 +391,16 @@ namespace AccessibilityMod.Core
                 // Match the two sound effect hits from judgmentCtrl.CoroutineUSA
                 // First sound at frame 20 (~0.33s), second at frame 90 (~1.5s)
                 yield return new WaitForSeconds(0.33f);
-                SpeechManager.Announce("Not", TextType.Trial);
+                SpeechManager.Announce(Services.L.Get("verdict.not"), TextType.Trial);
 
                 yield return new WaitForSeconds(1.17f); // 1.5s - 0.33s
-                SpeechManager.Announce("Guilty", TextType.Trial);
+                SpeechManager.Announce(Services.L.Get("verdict.guilty"), TextType.Trial);
             }
             else
             {
                 // Spell out G-U-I-L-T-Y matching 6 sound effects at 10-frame intervals
-                string[] letters = { "G", "U", "I", "L", "T", "Y" };
+                // Note: This spelling may need adjustment for non-English localizations
+                string[] letters = Services.L.Get("verdict.guilty_letters").Split('-');
                 yield return new WaitForSeconds(0.17f); // First sound at frame 10
 
                 for (int i = 0; i < letters.Length; i++)

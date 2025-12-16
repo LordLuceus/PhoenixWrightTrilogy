@@ -81,10 +81,7 @@ namespace AccessibilityMod.Patches
             {
                 if (__result)
                 {
-                    SpeechManager.Announce(
-                        "Fingerprint revealed! Proceeding to comparison.",
-                        TextType.Investigation
-                    );
+                    SpeechManager.Announce(L.Get("fingerprint.revealed"), TextType.Investigation);
                 }
                 else
                 {
@@ -107,14 +104,14 @@ namespace AccessibilityMod.Patches
                             if (percentage == 0)
                             {
                                 SpeechManager.Announce(
-                                    "No powder on fingerprint. Move cursor while pressing Enter to apply powder.",
+                                    L.Get("fingerprint.no_powder"),
                                     TextType.Investigation
                                 );
                             }
                             else
                             {
                                 SpeechManager.Announce(
-                                    $"{percentage} percent. Keep applying powder.",
+                                    L.Get("fingerprint.percent_keep_applying", percentage),
                                     TextType.Investigation
                                 );
                             }
@@ -122,7 +119,7 @@ namespace AccessibilityMod.Patches
                         else
                         {
                             SpeechManager.Announce(
-                                "Not enough powder. Keep applying.",
+                                L.Get("fingerprint.not_enough"),
                                 TextType.Investigation
                             );
                         }

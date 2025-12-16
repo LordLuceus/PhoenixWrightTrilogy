@@ -153,9 +153,10 @@ namespace AccessibilityMod.Services
             string scrollHint = IsScrollableBackground() ? L.Get("bug_sweeper.pan_hint") : "";
             string message =
                 L.Get("mode.bug_sweeper")
-                + "."
+                + ". "
                 + targetInfo
-                + " Move cursor to scan for listening devices."
+                + " "
+                + L.Get("bug_sweeper.move_to_scan")
                 + scrollHint;
             SpeechManager.Announce(message, TextType.Investigation);
         }

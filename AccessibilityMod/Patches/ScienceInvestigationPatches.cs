@@ -39,8 +39,7 @@ namespace AccessibilityMod.Patches
                 string evidenceName = Evidence3DNavigator.GetCurrentEvidenceName();
                 int hotspotCount = Evidence3DNavigator.GetHotspotCount();
 
-                string message =
-                    $"3D examination: {evidenceName}. {hotspotCount} hotspots. Use [ and ] to navigate hotspots. J to zoom in, E to zoom out.";
+                string message = L.Get("evidence_3d.opened", evidenceName, hotspotCount);
 
                 SpeechManager.Announce(message, TextType.Menu);
 
@@ -73,7 +72,7 @@ namespace AccessibilityMod.Patches
                     // Clean up 3D navigator state
                     Evidence3DNavigator.OnExit3DMode();
 
-                    SpeechManager.Announce("Exited 3D examination", TextType.Menu);
+                    SpeechManager.Announce(L.Get("evidence_3d.exited"), TextType.Menu);
 
                     AccessibilityMod.Core.AccessibilityMod.Logger?.Msg(
                         "[3DEvidence] Exited 3D examination mode"
@@ -106,7 +105,7 @@ namespace AccessibilityMod.Patches
                 // Check if we moved onto a hotspot (from no hotspot or different hotspot)
                 if (currentHitIndex != -1 && currentHitIndex != _lastHitPointIndex)
                 {
-                    SpeechManager.Announce("Hotspot", TextType.Menu);
+                    SpeechManager.Announce(L.Get("evidence_3d.hotspot"), TextType.Menu);
                 }
 
                 _lastHitPointIndex = currentHitIndex;

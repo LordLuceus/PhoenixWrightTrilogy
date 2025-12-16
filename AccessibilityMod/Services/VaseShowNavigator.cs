@@ -197,7 +197,7 @@ namespace AccessibilityMod.Services
             // Provide specific guidance
             if (Math.Abs(xDiff) > SafeRange.x)
             {
-                string direction = xDiff > 0 ? "H key" : "N key";
+                string direction = xDiff > 0 ? L.Get("key.h") : L.Get("key.n");
                 hint += L.Get("vase_show.x_needs", (int)Math.Abs(xDiff), direction) + " ";
             }
             else
@@ -207,7 +207,7 @@ namespace AccessibilityMod.Services
 
             if (Math.Abs(yDiff) > SafeRange.y)
             {
-                string direction = yDiff > 0 ? "M key" : "B key";
+                string direction = yDiff > 0 ? L.Get("key.m") : L.Get("key.b");
                 hint += L.Get("vase_show.y_needs", (int)Math.Abs(yDiff), direction) + " ";
             }
             else
@@ -217,7 +217,7 @@ namespace AccessibilityMod.Services
 
             if (Math.Abs(zDiff) > SafeRange.z)
             {
-                string direction = zDiff > 0 ? "R key" : "Q key";
+                string direction = zDiff > 0 ? L.Get("key.r") : L.Get("key.q");
                 hint += L.Get("vase_show.z_needs", (int)Math.Abs(zDiff), direction) + " ";
             }
             else

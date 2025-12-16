@@ -41,14 +41,14 @@ namespace AccessibilityMod.Patches
                 // Still needs more sprays
                 int remaining = __instance.discovery_count_;
                 SpeechManager.Announce(
-                    $"Hit! {remaining} more spray{(remaining != 1 ? "s" : "")} needed.",
+                    L.Get("luminol.hit_more_needed", remaining),
                     TextType.Investigation
                 );
             }
             else if (__instance.state_ == BloodstainState.Discovery)
             {
                 // Full discovery - animation starting
-                SpeechManager.Announce("Blood trace found!", TextType.Investigation);
+                SpeechManager.Announce(L.Get("luminol.blood_found"), TextType.Investigation);
             }
         }
     }

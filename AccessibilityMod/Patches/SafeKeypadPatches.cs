@@ -1,5 +1,6 @@
 using System.Reflection;
 using AccessibilityMod.Core;
+using AccessibilityMod.Services;
 using HarmonyLib;
 
 namespace AccessibilityMod.Patches
@@ -56,7 +57,8 @@ namespace AccessibilityMod.Patches
                         _lastCursorY = cursorY;
 
                         int buttonValue = ButtonLayout[cursorY, cursorX];
-                        string buttonName = buttonValue == 10 ? "Back" : buttonValue.ToString();
+                        string buttonName =
+                            buttonValue == 10 ? L.Get("safe_keypad.back") : buttonValue.ToString();
 
                         SpeechManager.Announce(buttonName, TextType.Menu);
                     }
@@ -77,7 +79,7 @@ namespace AccessibilityMod.Patches
         {
             _lastCursorX = -1;
             _lastCursorY = -1;
-            SpeechManager.Announce("Safe keypad. Enter the 7-digit code.", TextType.Menu);
+            SpeechManager.Announce(L.Get("safe_keypad.opened"), TextType.Menu);
         }
 
         /// <summary>
@@ -91,12 +93,12 @@ namespace AccessibilityMod.Patches
             {
                 if (num == 10)
                 {
-                    SpeechManager.Announce("Deleted", TextType.Menu);
+                    SpeechManager.Announce(L.Get("safe_keypad.deleted"), TextType.Menu);
                 }
                 else
                 {
                     // Number entered - the game plays a sound, we just confirm
-                    SpeechManager.Announce($"Entered {num}", TextType.Menu);
+                    SpeechManager.Announce(L.Get("safe_keypad.entered", num), TextType.Menu);
                 }
             }
             catch
