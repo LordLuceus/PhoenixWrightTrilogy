@@ -417,7 +417,256 @@ namespace AccessibilityMod.Services
 
         private static void AnnouncePowderHint()
         {
-            SpeechManager.Announce(L.Get("fingerprint.powder_hint"), TextType.Investigation);
+            // Try to get regional coverage info
+            var coverageInfo = GetRegionalCoverageInfo();
+            string regionHint = coverageInfo?.GetRegionHint();
+
+            if (!string.IsNullOrEmpty(regionHint))
+            {
+                // Show which regions need more powder
+                SpeechManager.Announce(regionHint, TextType.Investigation);
+            }
+            else
+            {
+                // Standard hint
+                SpeechManager.Announce(L.Get("fingerprint.powder_hint"), TextType.Investigation);
+            }
+        }
+
+        /// <summary>
+        /// Holds regional coverage information for the fingerprint powder phase.
+        /// </summary>
+        private class RegionalCoverageInfo
+        {
+            public int[,] RegionPercentages; // 3x3 grid
+            public int MaskWidth;
+            public int MaskHeight;
+
+            /// <summary>
+            /// Gets a hint about which regions need more powder, or null if no specific regions stand out.
+            /// </summary>
+            public string GetRegionHint()
+            {
+                // Find the highest coverage among all regions
+                int maxCoverage = 0;
+                for (int row = 0; row < 3; row++)
+                {
+                    for (int col = 0; col < 3; col++)
+                    {
+                        if (RegionPercentages[row, col] > maxCoverage)
+                            maxCoverage = RegionPercentages[row, col];
+                    }
+                }
+
+                // If max coverage is too low, we don't have enough data to give useful regional hints
+                if (maxCoverage < 30)
+                    return null;
+
+                // Find regions that are significantly behind the best region
+                var lowCoverageRegions = new List<string>();
+
+                for (int row = 0; row < 3; row++)
+                {
+                    for (int col = 0; col < 3; col++)
+                    {
+                        int regionPct = RegionPercentages[row, col];
+                        // A region needs attention if it's noticeably behind the best region
+                        // Use tight threshold (8 points) to catch small differences at high coverage
+                        if (regionPct < 98 && regionPct < maxCoverage - 8)
+                        {
+                            // Note: row 0 is bottom of screen (mask Y starts from bottom)
+                            string vertical =
+                                row == 0 ? L.Get("position.bottom")
+                                : row == 1 ? L.Get("position.middle")
+                                : L.Get("position.top");
+                            string horizontal =
+                                col == 0 ? L.Get("position.left")
+                                : col == 1 ? L.Get("position.center")
+                                : L.Get("position.right");
+                            lowCoverageRegions.Add($"{vertical} {horizontal}");
+                        }
+                    }
+                }
+
+                if (lowCoverageRegions.Count == 0)
+                {
+                    // All regions are fairly even
+                    return L.Get("fingerprint.powder_coverage_even");
+                }
+                else if (lowCoverageRegions.Count <= 3)
+                {
+                    // Report specific regions
+                    string regions = string.Join(", ", lowCoverageRegions.ToArray());
+                    return L.Get("fingerprint.powder_coverage_regions", regions);
+                }
+                else
+                {
+                    // Too many low regions - not useful to list them all
+                    return null;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Analyzes regional powder coverage to help users find areas needing more powder.
+        /// </summary>
+        private static RegionalCoverageInfo GetRegionalCoverageInfo()
+        {
+            try
+            {
+                if (FingerMiniGame.instance == null || !FingerMiniGame.instance.is_running)
+                    return null;
+
+                // Get mask data via reflection
+                var maskDataField = typeof(FingerMiniGame).GetField(
+                    "mask_data_",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+                var maskWidthField = typeof(FingerMiniGame).GetField(
+                    "mask_width_",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+                var maskHeightField = typeof(FingerMiniGame).GetField(
+                    "mask_height_",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+                var tempTextureField = typeof(FingerMiniGame).GetField(
+                    "temporary_texture_",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+                var renderTextureField = typeof(FingerMiniGame).GetField(
+                    "render_texture_",
+                    BindingFlags.NonPublic | BindingFlags.Instance
+                );
+
+                if (
+                    maskDataField == null
+                    || maskWidthField == null
+                    || maskHeightField == null
+                    || tempTextureField == null
+                )
+                    return null;
+
+                byte[] maskData = maskDataField.GetValue(FingerMiniGame.instance) as byte[];
+                int maskWidth = (int)maskWidthField.GetValue(FingerMiniGame.instance);
+                int maskHeight = (int)maskHeightField.GetValue(FingerMiniGame.instance);
+                var tempTexture = tempTextureField.GetValue(FingerMiniGame.instance) as Texture2D;
+                var renderTexture =
+                    renderTextureField?.GetValue(FingerMiniGame.instance) as RenderTexture;
+
+                if (maskData == null || tempTexture == null || maskWidth <= 0 || maskHeight <= 0)
+                    return null;
+
+                // Read current pixel data from render texture for regional analysis
+                Color32[] pixels = null;
+                if (renderTexture != null)
+                {
+                    // Save current render target
+                    var previousRT = RenderTexture.active;
+                    RenderTexture.active = renderTexture;
+
+                    // Read pixels into a temporary texture
+                    var screenRect = new Rect(
+                        0f,
+                        0f,
+                        systemCtrl.instance.ScreenWidth,
+                        systemCtrl.instance.ScreenHeight
+                    );
+                    tempTexture.ReadPixels(
+                        screenRect,
+                        0,
+                        (int)((float)tempTexture.height - screenRect.height)
+                    );
+                    pixels = tempTexture.GetPixels32();
+
+                    // Restore render target
+                    RenderTexture.active = previousRT;
+                }
+                else
+                {
+                    // Fall back to reading from temp texture directly
+                    pixels = tempTexture.GetPixels32();
+                }
+
+                if (pixels == null)
+                    return null;
+
+                // Calculate 3x3 grid coverage for regional breakdown
+                int[,] regionRequired = new int[3, 3];
+                int[,] regionCovered = new int[3, 3];
+
+                int cellWidth = maskWidth / 3;
+                int cellHeight = maskHeight / 3;
+
+                int screenWidth = (int)systemCtrl.instance.ScreenWidth;
+                int screenHeight = (int)systemCtrl.instance.ScreenHeight;
+                int endX = System.Math.Min(screenWidth, maskWidth);
+                int endY = System.Math.Min(screenHeight, maskHeight);
+
+                int textureYOffset =
+                    (int)((float)tempTexture.height - screenHeight) * tempTexture.width;
+
+                for (int y = 0; y < endY; y++)
+                {
+                    int row = System.Math.Min(y / cellHeight, 2);
+                    int maskYIndex = y * maskWidth;
+                    int pixelYIndex = textureYOffset + y * tempTexture.width;
+
+                    for (int x = 0; x < endX; x++)
+                    {
+                        int col = System.Math.Min(x / cellWidth, 2);
+                        int maskIndex = maskYIndex + x;
+                        int pixelIndex = pixelYIndex + x;
+
+                        if (maskIndex >= maskData.Length || pixelIndex >= pixels.Length)
+                            continue;
+
+                        byte maskValue = maskData[maskIndex];
+                        if (maskValue > 0)
+                        {
+                            regionRequired[row, col]++;
+
+                            if (pixels[pixelIndex].a >= maskValue)
+                            {
+                                regionCovered[row, col]++;
+                            }
+                        }
+                    }
+                }
+
+                var info = new RegionalCoverageInfo
+                {
+                    RegionPercentages = new int[3, 3],
+                    MaskWidth = maskWidth,
+                    MaskHeight = maskHeight,
+                };
+
+                for (int row = 0; row < 3; row++)
+                {
+                    for (int col = 0; col < 3; col++)
+                    {
+                        if (regionRequired[row, col] > 0)
+                        {
+                            info.RegionPercentages[row, col] = (int)(
+                                (float)regionCovered[row, col] / regionRequired[row, col] * 100f
+                            );
+                        }
+                        else
+                        {
+                            info.RegionPercentages[row, col] = 100; // No mask data = fully covered
+                        }
+                    }
+                }
+
+                return info;
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error(
+                    $"Error getting regional coverage: {ex.Message}"
+                );
+                return null;
+            }
         }
 
         private static void AnnounceComparisonHint()

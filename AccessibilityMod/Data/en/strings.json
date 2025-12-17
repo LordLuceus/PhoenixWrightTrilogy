@@ -131,6 +131,8 @@
   "fingerprint.no_powder": "No powder on fingerprint. Move cursor while pressing Enter to apply powder.",
   "fingerprint.percent_keep_applying": "{0} percent. Keep applying powder.",
   "fingerprint.not_enough": "Not enough powder. Keep applying.",
+  "fingerprint.powder_coverage_even": "Coverage is fairly even. Continue applying powder across the area.",
+  "fingerprint.powder_coverage_regions": "Focus on: {0}.",
   "fingerprint.character.ema_skye": "Ema Skye",
   "fingerprint.character.mike_meekins": "Mike Meekins",
   "fingerprint.character.jake_marshall": "Jake Marshall",
@@ -138,6 +140,7 @@
   "fingerprint.character.damon_gant": "Damon Gant",
   "fingerprint.character.bruce_goodman": "Bruce Goodman",
   "fingerprint.character.dick_gumshoe": "Dick Gumshoe",
+  "fingerprint.character.angel_starr": "Angel Starr",
 
   "_section_vase": "=== Vase Puzzle ===",
   "vase.start": "Vase puzzle. Use Left/Right to select pieces, Q/R to rotate. Press H for hint, E to combine.",
