@@ -272,7 +272,6 @@ namespace AccessibilityMod.Services
                     AccessibilityMod.Core.AccessibilityMod.Logger?.Msg(
                         $"{currentGame} sprite ID {spriteId} - add \"{spriteId}\": \"NAME\" to {currentGame}_Names.json"
                     );
-                    name = $"Speaker {spriteId}";
                 }
 
                 // Cache the result
