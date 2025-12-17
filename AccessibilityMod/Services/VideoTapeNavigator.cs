@@ -237,7 +237,7 @@ namespace AccessibilityMod.Services
                     int targetCount = GetActiveTargetCount();
                     string targetInfo =
                         targetCount > 0
-                            ? ", " + L.Get("video_tape.targets_available", targetCount)
+                            ? ", " + L.GetPlural("video_tape.targets_available", targetCount)
                             : "";
                     SpeechManager.Announce(
                         L.Get("video_tape.paused_at_frame", currentFrame, targetInfo),
@@ -298,7 +298,7 @@ namespace AccessibilityMod.Services
                 : L.Get("video_tape.state_paused");
             string targetInfo =
                 targets > 0
-                    ? L.Get("video_tape.targets_available", targets)
+                    ? L.GetPlural("video_tape.targets_available", targets)
                     : L.Get("video_tape.no_targets");
 
             if (overTarget)

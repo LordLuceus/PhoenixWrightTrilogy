@@ -22,5 +22,15 @@ namespace AccessibilityMod.Services
         {
             return LocalizationService.Get(key, args);
         }
+
+        /// <summary>
+        /// Get a localized string with proper singular/plural form based on count.
+        /// Uses CLDR convention: "{key}.one" for singular (count == 1), "{key}.other" for plural.
+        /// Example: L.GetPlural("vase.pieces_remaining", 1) returns "1 piece remaining"
+        /// </summary>
+        public static string GetPlural(string key, int count, params object[] extraArgs)
+        {
+            return LocalizationService.GetPlural(key, count, extraArgs);
+        }
     }
 }

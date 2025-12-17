@@ -161,6 +161,67 @@ namespace AccessibilityMod.Services
             }
         }
 
+        /// <summary>
+        /// Get a localized string with proper singular/plural form based on count.
+        /// Uses CLDR convention: "{key}.one" for singular (count == 1), "{key}.other" for plural.
+        /// Falls back to base key if plural variants aren't found.
+        /// Example: GetPlural("vase.pieces_remaining", 1) returns "1 piece remaining"
+        ///          GetPlural("vase.pieces_remaining", 3) returns "3 pieces remaining"
+        /// </summary>
+        public static string GetPlural(string key, int count, params object[] extraArgs)
+        {
+            if (!_initialized)
+                Initialize();
+
+            CheckLanguageChange();
+
+            if (Net35Extensions.IsNullOrWhiteSpace(key))
+                return "";
+
+            // Determine which plural form to use (English: one vs other)
+            string pluralKey = count == 1 ? key + ".one" : key + ".other";
+
+            // Try to get the plural-specific string
+            string template;
+            if (
+                _strings.TryGetValue(pluralKey, out template)
+                || _fallbackStrings.TryGetValue(pluralKey, out template)
+            )
+            {
+                // Found plural variant
+            }
+            else
+            {
+                // Fall back to base key for backward compatibility
+                template = Get(key);
+            }
+
+            // Build args array with count as first argument
+            object[] args;
+            if (extraArgs == null || extraArgs.Length == 0)
+            {
+                args = new object[] { count };
+            }
+            else
+            {
+                args = new object[extraArgs.Length + 1];
+                args[0] = count;
+                Array.Copy(extraArgs, 0, args, 1, extraArgs.Length);
+            }
+
+            try
+            {
+                return string.Format(template, args);
+            }
+            catch (FormatException)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Warning(
+                    $"Format error for plural key '{pluralKey}' with count {count}"
+                );
+                return template;
+            }
+        }
+
         private static void DetectLanguage()
         {
             try

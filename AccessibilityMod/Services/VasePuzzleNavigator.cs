@@ -189,7 +189,7 @@ namespace AccessibilityMod.Services
                 int piecesRemaining = solutionPieceOrder.Length - puzzleStep;
 
                 // Build the hint message
-                string hint = L.Get("vase.pieces_remaining", piecesRemaining) + " ";
+                string hint = L.GetPlural("vase.pieces_remaining", piecesRemaining) + " ";
 
                 // Check if they're on the correct piece
                 if (currentCursor == correctPieceIndex)
@@ -213,11 +213,11 @@ namespace AccessibilityMod.Services
 
                         if (rightPresses <= leftPresses)
                         {
-                            hint += L.Get("vase.press_r_times", rightPresses);
+                            hint += L.GetPlural("vase.press_r_times", rightPresses);
                         }
                         else
                         {
-                            hint += L.Get("vase.press_q_times", leftPresses);
+                            hint += L.GetPlural("vase.press_q_times", leftPresses);
                         }
                     }
                 }
@@ -317,7 +317,7 @@ namespace AccessibilityMod.Services
                 {
                     state += ", " + L.Get("vase.rotated_degrees", rotation);
                 }
-                state += ". " + L.Get("vase.pieces_remaining", piecesRemaining);
+                state += ". " + L.GetPlural("vase.pieces_remaining", piecesRemaining);
 
                 SpeechManager.Announce(state, TextType.Investigation);
             }

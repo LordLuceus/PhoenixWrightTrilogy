@@ -106,7 +106,7 @@ namespace AccessibilityMod.Patches
                 _totalLocks = _level > 5 ? 5 : _level;
                 _lastAnnouncedLockCount = _totalLocks;
 
-                string message = L.Get("psyche_lock.total", _totalLocks);
+                string message = L.GetPlural("psyche_lock.total", _totalLocks);
                 SpeechManager.Announce(message, TextType.Menu);
 
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Msg(
@@ -149,7 +149,7 @@ namespace AccessibilityMod.Patches
                 }
                 else
                 {
-                    message = L.Get("psyche_lock.broken_remaining", remaining);
+                    message = L.GetPlural("psyche_lock.broken_remaining", remaining);
                 }
 
                 SpeechManager.Announce(message, TextType.Menu);

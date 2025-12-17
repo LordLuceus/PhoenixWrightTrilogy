@@ -41,7 +41,7 @@ namespace AccessibilityMod.Patches
                 // Still needs more sprays
                 int remaining = __instance.discovery_count_;
                 SpeechManager.Announce(
-                    L.Get("luminol.hit_more_needed", remaining),
+                    L.GetPlural("luminol.hit_more_needed", remaining),
                     TextType.Investigation
                 );
             }
