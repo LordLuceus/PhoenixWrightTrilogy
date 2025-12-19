@@ -23,6 +23,8 @@ namespace AccessibilityMod.Patches
         // Reflection cache
         private static FieldInfo _cursorNoField;
         private static FieldInfo _selectListField;
+        private static FieldInfo _messageTextField;
+        private static FieldInfo _releaseNoteMessageField;
 
         private static readonly BindingFlags NonPublicInstance =
             BindingFlags.NonPublic | BindingFlags.Instance;
@@ -76,13 +78,21 @@ namespace AccessibilityMod.Patches
                 _termsInstance = __instance;
                 _lastTermsCursor = -1;
 
-                // Announce dialog title
-                SpeechManager.Announce(L.Get("first_launch.terms_dialog_opened"), TextType.Menu);
+                // Get the message content
+                string messageContent = GetTermsMessageContent(__instance);
+
+                // Announce dialog title and content
+                string announcement = L.Get("first_launch.terms_dialog_opened");
+                if (!Net35Extensions.IsNullOrWhiteSpace(messageContent))
+                {
+                    announcement += ". " + messageContent;
+                }
+                SpeechManager.Announce(announcement, TextType.Menu);
 
                 // Announce the default cursor position (starts at 1 = Privacy Policy / Detail)
                 // Use delayed announcement so it comes after the dialog opened message
                 CoroutineRunner.Instance?.ScheduleDelayedAnnouncement(
-                    0.3f,
+                    0.5f,
                     () =>
                     {
                         int cursor = GetTermsCursor();
@@ -102,6 +112,29 @@ namespace AccessibilityMod.Patches
                     $"Error in TermsOfService Initialize patch: {ex.Message}"
                 );
             }
+        }
+
+        private static string GetTermsMessageContent(DialogTermsOfServiceCtrl instance)
+        {
+            try
+            {
+                if (_messageTextField == null)
+                    _messageTextField = typeof(DialogTermsOfServiceCtrl).GetField(
+                        "message_text_",
+                        NonPublicInstance
+                    );
+
+                if (_messageTextField == null)
+                    return null;
+
+                var messageText = _messageTextField.GetValue(instance) as Text;
+                if (messageText != null && !Net35Extensions.IsNullOrWhiteSpace(messageText.text))
+                {
+                    return messageText.text;
+                }
+            }
+            catch { }
+            return null;
         }
 
         private static int GetTermsCursor()
@@ -178,8 +211,16 @@ namespace AccessibilityMod.Patches
         {
             try
             {
-                // Announce dialog title
-                SpeechManager.Announce(L.Get("first_launch.release_notes_opened"), TextType.Menu);
+                // Get the message content
+                string messageContent = GetReleaseNoteContent(__instance);
+
+                // Announce dialog title and content
+                string announcement = L.Get("first_launch.release_notes_opened");
+                if (!Net35Extensions.IsNullOrWhiteSpace(messageContent))
+                {
+                    announcement += ". " + messageContent;
+                }
+                SpeechManager.Announce(announcement, TextType.Menu);
             }
             catch (Exception ex)
             {
@@ -187,6 +228,29 @@ namespace AccessibilityMod.Patches
                     $"Error in ReleaseNote Awake patch: {ex.Message}"
                 );
             }
+        }
+
+        private static string GetReleaseNoteContent(DialogReleaseNoteCtrl instance)
+        {
+            try
+            {
+                if (_releaseNoteMessageField == null)
+                    _releaseNoteMessageField = typeof(DialogReleaseNoteCtrl).GetField(
+                        "m_MessageText",
+                        NonPublicInstance
+                    );
+
+                if (_releaseNoteMessageField == null)
+                    return null;
+
+                var messageText = _releaseNoteMessageField.GetValue(instance) as Text;
+                if (messageText != null && !Net35Extensions.IsNullOrWhiteSpace(messageText.text))
+                {
+                    return messageText.text;
+                }
+            }
+            catch { }
+            return null;
         }
 
         #endregion
