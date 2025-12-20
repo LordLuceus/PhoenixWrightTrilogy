@@ -356,7 +356,7 @@ namespace AccessibilityMod.Patches
                     {
                         if (line != null && !Net35Extensions.IsNullOrWhiteSpace(line.text))
                         {
-                            sb.Append(". ").Append(line.text);
+                            sb.Append(line.text);
                         }
                     }
                 }
