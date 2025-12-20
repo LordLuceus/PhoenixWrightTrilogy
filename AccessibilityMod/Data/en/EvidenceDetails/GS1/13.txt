@@ -1,0 +1,7 @@
+A schematic overhead map depicts a parking garage layout designated as area "[A]". The map uses a high-contrast style with beige flooring, dark brown walls and car icons, and white text and parking lines.
+
+In the upper left corner, a rectangular enclosure is labeled "Security room". To its right, along the top wall, a small alcove is labeled "Telephone", situated next to a short vertical partition wall. The center of this section is an open driveway area marked with a large white "[A]". Along the bottom wall of this section, four vertical parking spaces are arranged side-by-side, each occupied by a car icon facing upward.
+
+To the right of the central "[A]" area, a vertical column of horizontal spaces is arranged. The top space contains a car. Below it are two empty spaces marked with horizontal lines. The bottommost space in this column is filled with diagonal stripes, indicating a restricted or no-parking zone.
+
+A thick dashed vertical line separates this middle column from the rightmost section of the map. This right section features a vertical row of horizontal parking spaces. The top space is empty, while the three spaces below it are each occupied by a car. At the very top edge of the map, partially cut off by the frame, another dark rectangular shape is visible above the middle parking column.
