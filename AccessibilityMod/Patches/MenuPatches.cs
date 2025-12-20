@@ -485,14 +485,15 @@ namespace AccessibilityMod.Patches
                         textId = TextDataCtrl.TitleTextID.GS3_SCENARIO_NAME;
                         break;
                     default:
-                        return $"Episode {episodeIndex + 1}";
+                        return L.Get("menu.episode_x", episodeIndex + 1);
                 }
 
-                return TextDataCtrl.GetText(textId, episodeIndex);
+                string episodeTitle = TextDataCtrl.GetText(textId, episodeIndex);
+                return L.Get("menu.episode_x_title", episodeIndex + 1, episodeTitle);
             }
             catch
             {
-                return $"Episode {episodeIndex + 1}";
+                return L.Get("menu.episode_x", episodeIndex + 1);
             }
         }
 
@@ -676,22 +677,8 @@ namespace AccessibilityMod.Patches
         {
             try
             {
-                // Get episode cursor from instance
-                var nameTableField = typeof(ChapterJumpInMenuCtrl).GetField(
-                    "name_table",
-                    System.Reflection.BindingFlags.NonPublic
-                        | System.Reflection.BindingFlags.Instance
-                );
-                if (nameTableField == null)
-                    return;
-
-                var nameTable =
-                    nameTableField.GetValue(__instance)
-                    as System.Collections.Generic.List<System.Collections.Generic.List<string>>;
-                if (nameTable == null || position < 0 || position >= nameTable.Count)
-                    return;
-
-                string episodeName = L.Get("menu.episode_x", position + 1);
+                // Get the actual episode name from the game's text data
+                string episodeName = GetScenarioEpisodeName(position);
                 SpeechManager.Announce(episodeName, TextType.Menu);
             }
             catch (Exception ex)

@@ -305,6 +305,7 @@
   "menu.episode_selection": "Episode selection. Use left and right to choose episode.",
   "menu.chapter_selection": "Chapter selection. Use left and right to choose episode, up and down to choose chapter.",
   "menu.episode_x": "Episode {0}",
+  "menu.episode_x_title": "Episode {0}: {1}",
   "menu.unknown": "Unknown",
   "menu.game_title.gs1": "Phoenix Wright: Ace Attorney",
   "menu.game_title.gs2": "Phoenix Wright: Ace Attorney - Justice for All",
