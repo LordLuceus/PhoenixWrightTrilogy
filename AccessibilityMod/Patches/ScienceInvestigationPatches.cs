@@ -2,6 +2,7 @@ using System;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -41,7 +42,7 @@ namespace AccessibilityMod.Patches
 
                 string message = L.Get("evidence_3d.opened", evidenceName, hotspotCount);
 
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
 
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Msg(
                     $"[3DEvidence] Entered 3D examination mode for: {evidenceName}, {hotspotCount} hotspots"
@@ -72,7 +73,7 @@ namespace AccessibilityMod.Patches
                     // Clean up 3D navigator state
                     Evidence3DNavigator.OnExit3DMode();
 
-                    SpeechManager.Announce(L.Get("evidence_3d.exited"), TextType.Menu);
+                    SpeechManager.Announce(L.Get("evidence_3d.exited"), GameTextType.Menu);
 
                     AccessibilityMod.Core.AccessibilityMod.Logger?.Msg(
                         "[3DEvidence] Exited 3D examination mode"
@@ -105,7 +106,7 @@ namespace AccessibilityMod.Patches
                 // Check if we moved onto a hotspot (from no hotspot or different hotspot)
                 if (currentHitIndex != -1 && currentHitIndex != _lastHitPointIndex)
                 {
-                    SpeechManager.Announce(L.Get("evidence_3d.hotspot"), TextType.Menu);
+                    SpeechManager.Announce(L.Get("evidence_3d.hotspot"), GameTextType.Menu);
                 }
 
                 _lastHitPointIndex = currentHitIndex;

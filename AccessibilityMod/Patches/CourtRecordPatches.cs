@@ -3,6 +3,7 @@ using System.Text;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 using UnityEngine.UI;
 using L = AccessibilityMod.Services.L;
 
@@ -38,7 +39,7 @@ namespace AccessibilityMod.Patches
                 }
 
                 string message = L.Get("court_record.opened", tabName, itemCount);
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
 
                 // Reset tracking
                 _lastRecordCursor = -1;
@@ -83,7 +84,7 @@ namespace AccessibilityMod.Patches
                     }
 
                     string message = L.Get("court_record.tab_items", tabName, itemCount);
-                    SpeechManager.Announce(message, TextType.Menu);
+                    SpeechManager.Announce(message, GameTextType.Menu);
                 }
 
                 _lastRecordType = recordType;
@@ -152,7 +153,7 @@ namespace AccessibilityMod.Patches
                     sb.Append(" - ").Append(L.Get("court_record.press_for_details"));
                 }
 
-                SpeechManager.Announce(sb.ToString(), TextType.Menu);
+                SpeechManager.Announce(sb.ToString(), GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -241,7 +242,7 @@ namespace AccessibilityMod.Patches
                 }
 
                 sb.Append(" ").Append(L.Get("court_record.close_hint"));
-                SpeechManager.Announce(sb.ToString(), TextType.Menu);
+                SpeechManager.Announce(sb.ToString(), GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -275,7 +276,7 @@ namespace AccessibilityMod.Patches
                     sb.Append(description);
                 }
 
-                SpeechManager.Announce(sb.ToString(), TextType.Menu);
+                SpeechManager.Announce(sb.ToString(), GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -322,7 +323,7 @@ namespace AccessibilityMod.Patches
                     }
                 }
 
-                SpeechManager.Announce(sb.ToString(), TextType.Menu);
+                SpeechManager.Announce(sb.ToString(), GameTextType.Menu);
             }
             catch (Exception ex)
             {

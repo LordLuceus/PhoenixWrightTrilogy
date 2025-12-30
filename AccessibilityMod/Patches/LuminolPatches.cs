@@ -1,6 +1,7 @@
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -30,13 +31,13 @@ namespace AccessibilityMod.Patches
                 int remaining = __instance.discovery_count_;
                 SpeechManager.Announce(
                     L.GetPlural("luminol.hit_more_needed", remaining),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
             else if (__instance.state_ == BloodstainState.Discovery)
             {
                 // Full discovery - animation starting
-                SpeechManager.Announce(L.Get("luminol.blood_found"), TextType.Investigation);
+                SpeechManager.Announce(L.Get("luminol.blood_found"), GameTextType.Investigation);
             }
         }
     }

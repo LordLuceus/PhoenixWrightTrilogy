@@ -8,6 +8,9 @@
     <GamePath>C:\Program Files (x86)\Steam\steamapps\common\Phoenix Wright Ace Attorney Trilogy</GamePath>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="MelonAccessibilityLib" Version="1.0.1" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="MelonLoader">
       <HintPath>$(GamePath)\MelonLoader\net35\MelonLoader.dll</HintPath>
       <Private>false</Private>
@@ -42,8 +45,9 @@
     </Reference>
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Message Text="--- Copying $(AssemblyName).dll to game Mods folder ---" Importance="high" />
+    <Message Text="--- Copying mod DLLs to game Mods folder ---" Importance="high" />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(GamePath)\Mods" />
+    <Copy SourceFiles="$(TargetDir)MelonAccessibilityLib.dll" DestinationFolder="$(GamePath)" />
   </Target>
   <!--Copy files from AccessibilityMod/Data/en to GAMEPATH/UserData/AccessibilityMod/en-->
   <Target Name="CopyDataFiles" AfterTargets="PostBuildEvent">
@@ -51,9 +55,6 @@
     <ItemGroup>
       <DataFiles Include="Data\**\*.*" />
     </ItemGroup>
-    <Copy
-      SourceFiles="@(DataFiles)"
-      DestinationFiles="@(DataFiles->'$(GamePath)\UserData\AccessibilityMod\%(RecursiveDir)%(Filename)%(Extension)')"
-    />
+    <Copy SourceFiles="@(DataFiles)" DestinationFiles="@(DataFiles->'$(GamePath)\UserData\AccessibilityMod\%(RecursiveDir)%(Filename)%(Extension)')" />
   </Target>
 </Project>

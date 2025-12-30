@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using AccessibilityMod.Patches;
 using AccessibilityMod.Services;
+using MelonAccessibilityLib;
 using MelonLoader;
 using UnityEngine;
 
@@ -18,6 +20,47 @@ namespace AccessibilityMod.Core
             Instance = this;
             Logger = LoggerInstance;
             Logger.Msg("Phoenix Wright Accessibility Mod initializing...");
+
+            // Initialize accessibility library
+            InitializeAccessibilityLibrary();
+        }
+
+        private void InitializeAccessibilityLibrary()
+        {
+            // Set up logging
+            AccessibilityLog.Logger = new MelonLoggerAdapter(Logger);
+
+            // Set up text type names for logging
+            SpeechManager.TextTypeNames = new Dictionary<int, string>
+            {
+                { GameTextType.Dialogue, "Dialogue" },
+                { GameTextType.Narrator, "Narrator" },
+                { GameTextType.Menu, "Menu" },
+                { GameTextType.MenuChoice, "MenuChoice" },
+                { GameTextType.System, "System" },
+                { GameTextType.Investigation, "Investigation" },
+                { GameTextType.Evidence, "Evidence" },
+                { GameTextType.Trial, "Trial" },
+                { GameTextType.PsycheLock, "PsycheLock" },
+                { GameTextType.Credits, "Credits" },
+            };
+
+            // Configure repeat storage for game-specific types
+            SpeechManager.ShouldStoreForRepeatPredicate = textType =>
+                textType == GameTextType.Dialogue
+                || textType == GameTextType.Narrator
+                || textType == GameTextType.Credits;
+
+            // Register game-specific text replacements for screen reader compatibility
+            // Replace multiplication signs with 'x' (used in resolution strings like "1920☓1080")
+            TextCleaner.AddReplacement("\u2613", "x"); // ☓ (ballot x)
+            TextCleaner.AddReplacement("\u00D7", "x"); // × (multiplication sign)
+
+            // Initialize speech
+            if (SpeechManager.Initialize())
+            {
+                Logger.Msg("Speech system initialized");
+            }
         }
 
         private void InitializeAccessibility()

@@ -2,6 +2,7 @@ using System;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -97,7 +98,7 @@ namespace AccessibilityMod.Patches
                         message = L.Get("trial.health_percent", percentage);
                     }
 
-                    SpeechManager.Announce(message, TextType.Trial);
+                    SpeechManager.Announce(message, GameTextType.Trial);
                 }
             }
             catch (Exception ex)

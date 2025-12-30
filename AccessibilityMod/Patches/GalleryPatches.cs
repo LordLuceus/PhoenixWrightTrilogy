@@ -3,6 +3,7 @@ using System.Reflection;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -30,7 +31,7 @@ namespace AccessibilityMod.Patches
             {
                 _isGalleryActive = true;
                 _lastAnnouncedIndex = -1;
-                SpeechManager.Announce(L.Get("gallery.opened"), TextType.Menu);
+                SpeechManager.Announce(L.Get("gallery.opened"), GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -63,7 +64,7 @@ namespace AccessibilityMod.Patches
                 string itemName = GetGalleryItemName(idx);
                 if (!Net35Extensions.IsNullOrWhiteSpace(itemName))
                 {
-                    SpeechManager.Announce(itemName, TextType.Menu);
+                    SpeechManager.Announce(itemName, GameTextType.Menu);
                 }
             }
             catch (Exception ex)

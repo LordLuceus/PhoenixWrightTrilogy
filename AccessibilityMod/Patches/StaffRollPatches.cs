@@ -4,6 +4,7 @@ using System.IO;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -76,7 +77,7 @@ namespace AccessibilityMod.Patches
                 string text = GetStaffRollText(currentIndex);
                 if (!Net35Extensions.IsNullOrWhiteSpace(text))
                 {
-                    SpeechManager.Output("", text, TextType.Credits);
+                    SpeechManager.Output("", text, GameTextType.Credits);
                 }
             }
             catch (Exception ex)

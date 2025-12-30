@@ -2,6 +2,7 @@ using System.Reflection;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -38,7 +39,7 @@ namespace AccessibilityMod.Patches
                         string name = FingerprintNavigator.GetComparisonCharacterName(cursor);
                         if (name != null)
                         {
-                            SpeechManager.Announce(name, TextType.Investigation);
+                            SpeechManager.Announce(name, GameTextType.Investigation);
                         }
                     }
                 }
@@ -60,7 +61,10 @@ namespace AccessibilityMod.Patches
             {
                 if (__result)
                 {
-                    SpeechManager.Announce(L.Get("fingerprint.revealed"), TextType.Investigation);
+                    SpeechManager.Announce(
+                        L.Get("fingerprint.revealed"),
+                        GameTextType.Investigation
+                    );
                 }
                 else
                 {
@@ -84,14 +88,14 @@ namespace AccessibilityMod.Patches
                             {
                                 SpeechManager.Announce(
                                     L.Get("fingerprint.no_powder"),
-                                    TextType.Investigation
+                                    GameTextType.Investigation
                                 );
                             }
                             else
                             {
                                 SpeechManager.Announce(
                                     L.Get("fingerprint.percent_keep_applying", percentage),
-                                    TextType.Investigation
+                                    GameTextType.Investigation
                                 );
                             }
                         }
@@ -99,7 +103,7 @@ namespace AccessibilityMod.Patches
                         {
                             SpeechManager.Announce(
                                 L.Get("fingerprint.not_enough"),
-                                TextType.Investigation
+                                GameTextType.Investigation
                             );
                         }
                     }

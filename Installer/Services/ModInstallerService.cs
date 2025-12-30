@@ -8,6 +8,7 @@ public class ModInstallerService
     private const string UserDataFolder = "UserData";
     private const string AccessibilityModFolder = "AccessibilityMod";
     private const string ModDll = "AccessibilityMod.dll";
+    private const string MelonAccessibilityLibDll = "MelonAccessibilityLib.dll";
     private const string UniversalSpeechDll = "UniversalSpeech.dll";
     private const string NvdaClientDll = "nvdaControllerClient.dll";
     private const string DataFolder = "Data";
@@ -67,7 +68,6 @@ public class ModInstallerService
     public void InstallMod(
         string extractedRoot,
         string gamePath,
-        bool force,
         Action<string>? statusCallback = null
     )
     {
@@ -81,33 +81,33 @@ public class ModInstallerService
         // Copy AccessibilityMod.dll to Mods folder
         var modDllSource = Path.Combine(extractedRoot, ModDll);
         var modDllDest = Path.Combine(modsPath, ModDll);
-        CopyFile(modDllSource, modDllDest, force, statusCallback);
+        CopyFile(modDllSource, modDllDest, statusCallback);
+
+        // Copy MelonAccessibilityLib.dll to game root
+        var melonLibSource = Path.Combine(extractedRoot, MelonAccessibilityLibDll);
+        var melonLibDest = Path.Combine(gamePath, MelonAccessibilityLibDll);
+        CopyFile(melonLibSource, melonLibDest, statusCallback);
 
         // Copy UniversalSpeech.dll to game root
         var universalSpeechSource = Path.Combine(extractedRoot, UniversalSpeechDll);
         var universalSpeechDest = Path.Combine(gamePath, UniversalSpeechDll);
-        CopyFile(universalSpeechSource, universalSpeechDest, force, statusCallback);
+        CopyFile(universalSpeechSource, universalSpeechDest, statusCallback);
 
         // Copy nvdaControllerClient.dll to game root
         var nvdaSource = Path.Combine(extractedRoot, NvdaClientDll);
         var nvdaDest = Path.Combine(gamePath, NvdaClientDll);
-        CopyFile(nvdaSource, nvdaDest, force, statusCallback);
+        CopyFile(nvdaSource, nvdaDest, statusCallback);
 
         // Copy Data folder contents to UserData/AccessibilityMod
         var dataSource = Path.Combine(extractedRoot, DataFolder);
         if (Directory.Exists(dataSource))
         {
             statusCallback?.Invoke("Copying localization files...");
-            CopyDirectory(dataSource, userDataPath, force);
+            CopyDirectory(dataSource, userDataPath);
         }
     }
 
-    private void CopyFile(
-        string source,
-        string destination,
-        bool force,
-        Action<string>? statusCallback = null
-    )
+    private void CopyFile(string source, string destination, Action<string>? statusCallback = null)
     {
         if (!File.Exists(source))
         {
@@ -117,15 +117,10 @@ public class ModInstallerService
         var fileName = Path.GetFileName(source);
         statusCallback?.Invoke($"Copying {fileName}...");
 
-        if (File.Exists(destination) && !force)
-        {
-            // In non-force mode, overwrite anyway (user confirmed during prompts)
-        }
-
         File.Copy(source, destination, overwrite: true);
     }
 
-    private void CopyDirectory(string sourceDir, string destDir, bool force)
+    private void CopyDirectory(string sourceDir, string destDir)
     {
         Directory.CreateDirectory(destDir);
 
@@ -140,7 +135,7 @@ public class ModInstallerService
         foreach (var subDir in Directory.GetDirectories(sourceDir))
         {
             var destSubDir = Path.Combine(destDir, Path.GetFileName(subDir));
-            CopyDirectory(subDir, destSubDir, force);
+            CopyDirectory(subDir, destSubDir);
         }
     }
 

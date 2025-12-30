@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Services
 {
@@ -158,7 +159,7 @@ namespace AccessibilityMod.Services
                 + " "
                 + L.Get("bug_sweeper.move_to_scan")
                 + scrollHint;
-            SpeechManager.Announce(message, TextType.Investigation);
+            SpeechManager.Announce(message, GameTextType.Investigation);
         }
 
         private static void OnBugSweeperEnd()
@@ -352,7 +353,7 @@ namespace AccessibilityMod.Services
         private static void OnSignalLevelChanged(int level)
         {
             string description = GetSignalDescription(level);
-            SpeechManager.Announce(description, TextType.Investigation);
+            SpeechManager.Announce(description, GameTextType.Investigation);
         }
 
         /// <summary>
@@ -387,14 +388,14 @@ namespace AccessibilityMod.Services
             {
                 SpeechManager.Announce(
                     L.Get("bug_sweeper.already_checked"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
             else
             {
                 SpeechManager.Announce(
                     L.Get("bug_sweeper.press_enter_check"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
         }
@@ -471,7 +472,10 @@ namespace AccessibilityMod.Services
         {
             if (!IsBugSweeperActive())
             {
-                SpeechManager.Announce(L.Get("bug_sweeper.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("bug_sweeper.not_in_mode"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
@@ -503,7 +507,7 @@ namespace AccessibilityMod.Services
             string scrollHint = IsScrollableBackground() ? " " + L.Get("luminol.pan_hint") : "";
 
             string message = L.Get("bug_sweeper.state", levelDesc, checkedInfo, scrollHint);
-            SpeechManager.Announce(message, TextType.Investigation);
+            SpeechManager.Announce(message, GameTextType.Investigation);
         }
 
         /// <summary>

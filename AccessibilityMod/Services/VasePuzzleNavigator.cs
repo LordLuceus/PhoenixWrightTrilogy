@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Services
 {
@@ -97,7 +98,7 @@ namespace AccessibilityMod.Services
                     {
                         SpeechManager.Announce(
                             L.Get("vase.start_final_piece"),
-                            TextType.Investigation
+                            GameTextType.Investigation
                         );
                         return;
                     }
@@ -108,7 +109,7 @@ namespace AccessibilityMod.Services
                 // Fall through to default message
             }
 
-            SpeechManager.Announce(L.Get("vase.start"), TextType.Investigation);
+            SpeechManager.Announce(L.Get("vase.start"), GameTextType.Investigation);
         }
 
         private static void OnPuzzleEnd()
@@ -124,7 +125,7 @@ namespace AccessibilityMod.Services
         {
             if (!IsVasePuzzleActive())
             {
-                SpeechManager.Announce(L.Get("vase.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("vase.not_in_mode"), GameTextType.SystemMessage);
                 return;
             }
 
@@ -153,7 +154,10 @@ namespace AccessibilityMod.Services
 
                 if (stepField == null || cursorField == null || piecesField == null)
                 {
-                    SpeechManager.Announce(L.Get("vase.unable_read_state"), TextType.SystemMessage);
+                    SpeechManager.Announce(
+                        L.Get("vase.unable_read_state"),
+                        GameTextType.SystemMessage
+                    );
                     return;
                 }
 
@@ -169,7 +173,7 @@ namespace AccessibilityMod.Services
                 {
                     SpeechManager.Announce(
                         L.Get("vase.unable_read_pieces"),
-                        TextType.SystemMessage
+                        GameTextType.SystemMessage
                     );
                     return;
                 }
@@ -180,7 +184,7 @@ namespace AccessibilityMod.Services
                 // Check if puzzle is complete
                 if (puzzleStep >= solutionPieceOrder.Length)
                 {
-                    SpeechManager.Announce(L.Get("vase.complete"), TextType.Investigation);
+                    SpeechManager.Announce(L.Get("vase.complete"), GameTextType.Investigation);
                     return;
                 }
 
@@ -243,14 +247,14 @@ namespace AccessibilityMod.Services
                     }
                 }
 
-                SpeechManager.Announce(hint, TextType.Investigation);
+                SpeechManager.Announce(hint, GameTextType.Investigation);
             }
             catch (Exception ex)
             {
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Error(
                     $"Error getting vase puzzle hint: {ex.Message}"
                 );
-                SpeechManager.Announce(L.Get("vase.unable_get_hint"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("vase.unable_get_hint"), GameTextType.SystemMessage);
             }
         }
 
@@ -261,7 +265,7 @@ namespace AccessibilityMod.Services
         {
             if (!IsVasePuzzleActive())
             {
-                SpeechManager.Announce(L.Get("vase.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("vase.not_in_mode"), GameTextType.SystemMessage);
                 return;
             }
 
@@ -284,7 +288,10 @@ namespace AccessibilityMod.Services
 
                 if (cursorField == null || piecesField == null || stepField == null)
                 {
-                    SpeechManager.Announce(L.Get("vase.unable_read_state"), TextType.SystemMessage);
+                    SpeechManager.Announce(
+                        L.Get("vase.unable_read_state"),
+                        GameTextType.SystemMessage
+                    );
                     return;
                 }
 
@@ -296,7 +303,7 @@ namespace AccessibilityMod.Services
                 {
                     SpeechManager.Announce(
                         L.Get("vase.unable_read_pieces"),
-                        TextType.SystemMessage
+                        GameTextType.SystemMessage
                     );
                     return;
                 }
@@ -319,14 +326,14 @@ namespace AccessibilityMod.Services
                 }
                 state += ". " + L.GetPlural("vase.pieces_remaining", piecesRemaining);
 
-                SpeechManager.Announce(state, TextType.Investigation);
+                SpeechManager.Announce(state, GameTextType.Investigation);
             }
             catch (Exception ex)
             {
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Error(
                     $"Error getting vase puzzle state: {ex.Message}"
                 );
-                SpeechManager.Announce(L.Get("vase.unable_read_state"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("vase.unable_read_state"), GameTextType.SystemMessage);
             }
         }
     }

@@ -1,5 +1,6 @@
 using System;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 using UnityEngine;
 
 namespace AccessibilityMod.Services
@@ -99,7 +100,7 @@ namespace AccessibilityMod.Services
         /// </summary>
         private static void AnnounceEntry()
         {
-            SpeechManager.Announce(L.Get("vase_show.start"), TextType.Menu);
+            SpeechManager.Announce(L.Get("vase_show.start"), GameTextType.Menu);
             _lastAnnouncedRotation = Vector3.zero;
         }
 
@@ -156,7 +157,7 @@ namespace AccessibilityMod.Services
                     message += L.Get("vase_show.z_correct") + " ";
             }
 
-            SpeechManager.Announce(message, TextType.Menu);
+            SpeechManager.Announce(message, GameTextType.Menu);
             _lastAnnouncedRotation = rotation;
         }
 
@@ -225,7 +226,7 @@ namespace AccessibilityMod.Services
                 hint += L.Get("vase_show.z_aligned") + " ";
             }
 
-            SpeechManager.Announce(hint, TextType.Menu);
+            SpeechManager.Announce(hint, GameTextType.Menu);
         }
 
         /// <summary>

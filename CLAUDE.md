@@ -45,11 +45,17 @@ dotnet publish -c Release
 ### Core Components
 
 - **AccessibilityMod.Core.AccessibilityMod**: Main MelonMod entry point. Handles initialization and keyboard input via `OnUpdate()`
+- **MelonLoggerAdapter**: Bridges MelonLoader logging with the MelonAccessibilityLib library
+- **CoroutineRunner**: MonoBehaviour singleton for menu cursor tracking and delayed announcements
+
+### MelonAccessibilityLib (NuGet dependency)
+
+The following components are provided by the `MelonAccessibilityLib` NuGet package:
+
 - **UniversalSpeechWrapper**: Low-level P/Invoke wrapper around UniversalSpeech library for text-to-speech output
 - **SpeechManager**: Centralized speech output manager
 - **Net35Extensions**: Polyfills for .NET 3.5 compatibility (`IsNullOrWhiteSpace`, etc.)
 - **TextCleaner**: Strips formatting tags and normalizes text for screen reader output
-- **CoroutineRunner**: MonoBehaviour singleton for menu cursor tracking and delayed announcements
 
 ### Keyboard Shortcuts
 

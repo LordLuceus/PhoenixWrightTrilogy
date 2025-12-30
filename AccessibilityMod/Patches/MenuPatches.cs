@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -35,7 +36,7 @@ namespace AccessibilityMod.Patches
         {
             try
             {
-                SpeechManager.Announce(L.Get("system.loaded"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("system.loaded"), GameTextType.SystemMessage);
             }
             catch (Exception ex)
             {
@@ -86,10 +87,10 @@ namespace AccessibilityMod.Patches
 
                 // Get the menu options and announce
                 string optionText = GetMainMenuOptionText(mainTitle, __instance.cursor_no);
-                if (!Core.Net35Extensions.IsNullOrWhiteSpace(optionText))
+                if (!Net35Extensions.IsNullOrWhiteSpace(optionText))
                 {
                     string message = L.Get("menu.main_menu", optionText);
-                    SpeechManager.Announce(message, TextType.Menu);
+                    SpeechManager.Announce(message, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -126,7 +127,7 @@ namespace AccessibilityMod.Patches
                 CoroutineRunner.Instance?.ScheduleDelayedAnnouncement(
                     0.1f, // Small delay to let the message be set
                     () => GetOptionCtrlConfirmationMessage(optionInstance),
-                    TextType.Menu
+                    GameTextType.Menu
                 );
                 return true;
             }
@@ -155,10 +156,10 @@ namespace AccessibilityMod.Patches
                 string line2 = textList.Count > 1 ? textList[1]?.text : null;
 
                 string message = "";
-                if (!Core.Net35Extensions.IsNullOrWhiteSpace(line1))
+                if (!Net35Extensions.IsNullOrWhiteSpace(line1))
                     message = line1;
-                if (!Core.Net35Extensions.IsNullOrWhiteSpace(line2))
-                    message = Core.Net35Extensions.IsNullOrWhiteSpace(message)
+                if (!Net35Extensions.IsNullOrWhiteSpace(line2))
+                    message = Net35Extensions.IsNullOrWhiteSpace(message)
                         ? line2
                         : message + " " + line2;
 
@@ -246,9 +247,9 @@ namespace AccessibilityMod.Patches
 
                 // Get the button text at the current cursor position
                 string optionText = GetTitleSelectPlateText(__instance, idx);
-                if (!Core.Net35Extensions.IsNullOrWhiteSpace(optionText))
+                if (!Net35Extensions.IsNullOrWhiteSpace(optionText))
                 {
-                    SpeechManager.Announce(optionText, TextType.Menu);
+                    SpeechManager.Announce(optionText, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -304,7 +305,7 @@ namespace AccessibilityMod.Patches
             {
                 _lastSeriesTitle = -1;
                 string message = L.Get("menu.select_game");
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -330,7 +331,7 @@ namespace AccessibilityMod.Patches
 
                 _lastSeriesTitle = titleIndex;
                 string titleName = GetGameTitleName(title_id);
-                SpeechManager.Announce(titleName, TextType.Menu);
+                SpeechManager.Announce(titleName, GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -368,7 +369,7 @@ namespace AccessibilityMod.Patches
             {
                 _lastScenarioEpisode = -1;
                 string message = L.Get("menu.episode_selection");
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -401,7 +402,7 @@ namespace AccessibilityMod.Patches
                 _lastScenarioEpisode = currentNum;
 
                 string episodeName = GetScenarioEpisodeName(currentNum);
-                SpeechManager.Announce(episodeName, TextType.Menu);
+                SpeechManager.Announce(episodeName, GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -437,17 +438,17 @@ namespace AccessibilityMod.Patches
                 string message = "";
                 foreach (var text in startText)
                 {
-                    if (text != null && !Core.Net35Extensions.IsNullOrWhiteSpace(text.text))
+                    if (text != null && !Net35Extensions.IsNullOrWhiteSpace(text.text))
                     {
-                        if (!Core.Net35Extensions.IsNullOrWhiteSpace(message))
+                        if (!Net35Extensions.IsNullOrWhiteSpace(message))
                             message += " ";
                         message += text.text;
                     }
                 }
 
-                if (!Core.Net35Extensions.IsNullOrWhiteSpace(message))
+                if (!Net35Extensions.IsNullOrWhiteSpace(message))
                 {
-                    SpeechManager.Announce(message, TextType.Menu);
+                    SpeechManager.Announce(message, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -529,7 +530,7 @@ namespace AccessibilityMod.Patches
                 CoroutineRunner.Instance?.ScheduleDelayedAnnouncement(
                     0.1f, // Small delay to let the message be set
                     () => GetExitGameDialogMessage(mainTitle),
-                    TextType.Menu
+                    GameTextType.Menu
                 );
                 return true;
             }
@@ -556,15 +557,15 @@ namespace AccessibilityMod.Patches
                 string message = "";
                 foreach (var text in messageList)
                 {
-                    if (text != null && !Core.Net35Extensions.IsNullOrWhiteSpace(text.text))
+                    if (text != null && !Net35Extensions.IsNullOrWhiteSpace(text.text))
                     {
-                        if (!Core.Net35Extensions.IsNullOrWhiteSpace(message))
+                        if (!Net35Extensions.IsNullOrWhiteSpace(message))
                             message += " ";
                         message += text.text;
                     }
                 }
 
-                return Core.Net35Extensions.IsNullOrWhiteSpace(message) ? null : message;
+                return Net35Extensions.IsNullOrWhiteSpace(message) ? null : message;
             }
             catch
             {
@@ -598,17 +599,17 @@ namespace AccessibilityMod.Patches
                 string message = "";
                 foreach (var text in startText)
                 {
-                    if (text != null && !Core.Net35Extensions.IsNullOrWhiteSpace(text.text))
+                    if (text != null && !Net35Extensions.IsNullOrWhiteSpace(text.text))
                     {
-                        if (!Core.Net35Extensions.IsNullOrWhiteSpace(message))
+                        if (!Net35Extensions.IsNullOrWhiteSpace(message))
                             message += " ";
                         message += text.text;
                     }
                 }
 
-                if (!Core.Net35Extensions.IsNullOrWhiteSpace(message))
+                if (!Net35Extensions.IsNullOrWhiteSpace(message))
                 {
-                    SpeechManager.Announce(message, TextType.Menu);
+                    SpeechManager.Announce(message, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -641,17 +642,17 @@ namespace AccessibilityMod.Patches
                 string message = "";
                 foreach (var text in startText)
                 {
-                    if (text != null && !Core.Net35Extensions.IsNullOrWhiteSpace(text.text))
+                    if (text != null && !Net35Extensions.IsNullOrWhiteSpace(text.text))
                     {
-                        if (!Core.Net35Extensions.IsNullOrWhiteSpace(message))
+                        if (!Net35Extensions.IsNullOrWhiteSpace(message))
                             message += " ";
                         message += text.text;
                     }
                 }
 
-                if (!Core.Net35Extensions.IsNullOrWhiteSpace(message))
+                if (!Net35Extensions.IsNullOrWhiteSpace(message))
                 {
-                    SpeechManager.Announce(message, TextType.Menu);
+                    SpeechManager.Announce(message, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -670,7 +671,7 @@ namespace AccessibilityMod.Patches
             try
             {
                 string message = L.Get("menu.chapter_selection");
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -692,7 +693,7 @@ namespace AccessibilityMod.Patches
             {
                 // Get the actual episode name from the game's text data
                 string episodeName = GetScenarioEpisodeName(position);
-                SpeechManager.Announce(episodeName, TextType.Menu);
+                SpeechManager.Announce(episodeName, GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -711,9 +712,9 @@ namespace AccessibilityMod.Patches
             {
                 int cursorNo = __instance.cursor_no;
                 string optionText = GetGeneralSelectOptionText(__instance, cursorNo);
-                if (!Core.Net35Extensions.IsNullOrWhiteSpace(optionText))
+                if (!Net35Extensions.IsNullOrWhiteSpace(optionText))
                 {
-                    SpeechManager.Announce(optionText, TextType.Menu);
+                    SpeechManager.Announce(optionText, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -778,7 +779,7 @@ namespace AccessibilityMod.Patches
 
                 string currentOption = GetTanteiOption(__instance.cursor_no, in_type);
                 string message = L.Get("menu.menu", currentOption);
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
 
                 AccessibilityState.SetMode(AccessibilityState.GameMode.Menu);
             }
@@ -801,7 +802,7 @@ namespace AccessibilityMod.Patches
                 {
                     _lastTanteiCursor = __instance.cursor_no;
                     string option = GetTanteiOption(__instance.cursor_no, __instance.setting);
-                    SpeechManager.Announce(option, TextType.Menu);
+                    SpeechManager.Announce(option, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -909,13 +910,13 @@ namespace AccessibilityMod.Patches
                 if (__instance.cursor_no >= 0 && __instance.cursor_no < _selectOptions.Count)
                 {
                     string currentOption = _selectOptions[__instance.cursor_no];
-                    if (!Core.Net35Extensions.IsNullOrWhiteSpace(currentOption))
+                    if (!Net35Extensions.IsNullOrWhiteSpace(currentOption))
                     {
                         string announcement = FormatSelectOptionAnnouncement(
                             currentOption,
                             __instance.cursor_no
                         );
-                        SpeechManager.Announce(announcement, TextType.MenuChoice);
+                        SpeechManager.Announce(announcement, GameTextType.MenuChoice);
                     }
                 }
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 using UnityEngine;
 
 namespace AccessibilityMod.Services
@@ -146,7 +147,7 @@ namespace AccessibilityMod.Services
 
             if (_hotspots.Count == 0)
             {
-                SpeechManager.Announce(L.Get("navigation.no_points"), TextType.Investigation);
+                SpeechManager.Announce(L.Get("navigation.no_points"), GameTextType.Investigation);
                 return;
             }
 
@@ -164,7 +165,7 @@ namespace AccessibilityMod.Services
 
             if (_hotspots.Count == 0)
             {
-                SpeechManager.Announce(L.Get("navigation.no_points"), TextType.Investigation);
+                SpeechManager.Announce(L.Get("navigation.no_points"), GameTextType.Investigation);
                 return;
             }
 
@@ -187,7 +188,10 @@ namespace AccessibilityMod.Services
 
             if (unexamined.Count == 0)
             {
-                SpeechManager.Announce(L.Get("navigation.all_examined"), TextType.Investigation);
+                SpeechManager.Announce(
+                    L.Get("navigation.all_examined"),
+                    GameTextType.Investigation
+                );
                 return;
             }
 
@@ -205,7 +209,7 @@ namespace AccessibilityMod.Services
                 }
             }
 
-            SpeechManager.Announce(L.Get("navigation.all_examined"), TextType.Investigation);
+            SpeechManager.Announce(L.Get("navigation.all_examined"), GameTextType.Investigation);
         }
 
         private static void RefreshExaminedStatus()
@@ -227,7 +231,7 @@ namespace AccessibilityMod.Services
             {
                 SpeechManager.Announce(
                     L.Get("navigation.no_point_selected"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
                 return;
             }
@@ -236,7 +240,7 @@ namespace AccessibilityMod.Services
             string status = hotspot.IsExamined ? " " + L.Get("navigation.examined_suffix") : "";
             string message = $"{hotspot.Description}{status}";
 
-            SpeechManager.Announce(message, TextType.Investigation);
+            SpeechManager.Announce(message, GameTextType.Investigation);
         }
 
         public static void AnnounceAllHotspots()
@@ -250,7 +254,7 @@ namespace AccessibilityMod.Services
 
             if (_hotspots.Count == 0)
             {
-                SpeechManager.Announce(L.Get("navigation.no_points"), TextType.Investigation);
+                SpeechManager.Announce(L.Get("navigation.no_points"), GameTextType.Investigation);
                 return;
             }
 
@@ -270,7 +274,7 @@ namespace AccessibilityMod.Services
                 summary += string.Join(", ", unexaminedList.Select(h => h.Description).ToArray());
             }
 
-            SpeechManager.Announce(summary, TextType.Investigation);
+            SpeechManager.Announce(summary, GameTextType.Investigation);
         }
 
         private static void MoveCursorToCurrentHotspot()
@@ -358,13 +362,13 @@ namespace AccessibilityMod.Services
                     message += " " + L.Get("investigation.unexamined_count", unexamined);
                 }
                 message += " " + L.Get("investigation.controls_hint");
-                SpeechManager.Announce(message, TextType.Investigation);
+                SpeechManager.Announce(message, GameTextType.Investigation);
             }
             else
             {
                 SpeechManager.Announce(
                     L.Get("investigation.mode_start_no_points"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
         }

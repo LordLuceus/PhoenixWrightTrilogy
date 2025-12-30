@@ -1,5 +1,6 @@
 using System;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Services
 {
@@ -296,7 +297,7 @@ namespace AccessibilityMod.Services
                     stateInfo = L.Get("system.unable_to_read_state");
                 }
 
-                SpeechManager.Announce(stateInfo, TextType.SystemMessage);
+                SpeechManager.Announce(stateInfo, GameTextType.SystemMessage);
             }
             catch (Exception ex)
             {
@@ -305,7 +306,7 @@ namespace AccessibilityMod.Services
                 );
                 SpeechManager.Announce(
                     L.Get("system.unable_to_read_state"),
-                    TextType.SystemMessage
+                    GameTextType.SystemMessage
                 );
             }
         }
@@ -345,7 +346,7 @@ namespace AccessibilityMod.Services
                         message = L.Get("trial.life_gauge", percentage);
                     }
 
-                    SpeechManager.Announce(message, TextType.Trial);
+                    SpeechManager.Announce(message, GameTextType.Trial);
                 }
             }
             catch (Exception ex)

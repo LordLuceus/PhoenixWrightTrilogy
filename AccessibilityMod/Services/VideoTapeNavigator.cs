@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 using UnityEngine;
 
 namespace AccessibilityMod.Services
@@ -230,7 +231,7 @@ namespace AccessibilityMod.Services
                 // Check for play/pause changes
                 if (isPlaying && !_wasPlaying)
                 {
-                    SpeechManager.Announce(L.Get("video_tape.playing"), TextType.Investigation);
+                    SpeechManager.Announce(L.Get("video_tape.playing"), GameTextType.Investigation);
                 }
                 else if (!isPlaying && _wasPlaying)
                 {
@@ -241,7 +242,7 @@ namespace AccessibilityMod.Services
                             : "";
                     SpeechManager.Announce(
                         L.Get("video_tape.paused_at_frame", currentFrame, targetInfo),
-                        TextType.Investigation
+                        GameTextType.Investigation
                     );
                 }
 
@@ -251,7 +252,7 @@ namespace AccessibilityMod.Services
                 {
                     SpeechManager.Announce(
                         L.Get("video_tape.target_available"),
-                        TextType.Investigation
+                        GameTextType.Investigation
                     );
                 }
                 _lastTargetCount = currentTargetCount;
@@ -268,7 +269,7 @@ namespace AccessibilityMod.Services
             _lastTargetCount = 0;
             _currentTargetIndex = -1;
 
-            SpeechManager.Announce(L.Get("video_tape.start"), TextType.Investigation);
+            SpeechManager.Announce(L.Get("video_tape.start"), GameTextType.Investigation);
         }
 
         private static void OnVideoTapeEnd()
@@ -284,7 +285,7 @@ namespace AccessibilityMod.Services
         {
             if (!IsVideoTapeActive())
             {
-                SpeechManager.Announce(L.Get("video_tape.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("video_tape.not_in_mode"), GameTextType.SystemMessage);
                 return;
             }
 
@@ -309,7 +310,7 @@ namespace AccessibilityMod.Services
 
             SpeechManager.Announce(
                 L.Get("video_tape.state", state, frame, targetInfo),
-                TextType.Investigation
+                GameTextType.Investigation
             );
         }
 
@@ -320,7 +321,7 @@ namespace AccessibilityMod.Services
         {
             if (!IsVideoTapeActive())
             {
-                SpeechManager.Announce(L.Get("video_tape.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("video_tape.not_in_mode"), GameTextType.SystemMessage);
                 return;
             }
 
@@ -348,7 +349,7 @@ namespace AccessibilityMod.Services
                     break;
             }
 
-            SpeechManager.Announce(hint, TextType.Investigation);
+            SpeechManager.Announce(hint, GameTextType.Investigation);
         }
 
         /// <summary>
@@ -390,13 +391,13 @@ namespace AccessibilityMod.Services
         {
             if (!IsVideoTapeActive())
             {
-                SpeechManager.Announce(L.Get("video_tape.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("video_tape.not_in_mode"), GameTextType.SystemMessage);
                 return;
             }
 
             if (IsPlaying())
             {
-                SpeechManager.Announce(L.Get("video_tape.pause_first"), TextType.Investigation);
+                SpeechManager.Announce(L.Get("video_tape.pause_first"), GameTextType.Investigation);
                 return;
             }
 
@@ -408,7 +409,7 @@ namespace AccessibilityMod.Services
                 {
                     SpeechManager.Announce(
                         L.Get("video_tape.no_targets_at_frame"),
-                        TextType.Investigation
+                        GameTextType.Investigation
                     );
                     return;
                 }
@@ -435,13 +436,13 @@ namespace AccessibilityMod.Services
         {
             if (!IsVideoTapeActive())
             {
-                SpeechManager.Announce(L.Get("video_tape.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("video_tape.not_in_mode"), GameTextType.SystemMessage);
                 return;
             }
 
             if (IsPlaying())
             {
-                SpeechManager.Announce(L.Get("video_tape.pause_first"), TextType.Investigation);
+                SpeechManager.Announce(L.Get("video_tape.pause_first"), GameTextType.Investigation);
                 return;
             }
 
@@ -453,7 +454,7 @@ namespace AccessibilityMod.Services
                 {
                     SpeechManager.Announce(
                         L.Get("video_tape.no_targets_at_frame"),
-                        TextType.Investigation
+                        GameTextType.Investigation
                     );
                     return;
                 }
@@ -537,7 +538,7 @@ namespace AccessibilityMod.Services
             {
                 SpeechManager.Announce(
                     L.Get("video_tape.target_x_of_y", index + 1, total),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
             else
@@ -552,14 +553,14 @@ namespace AccessibilityMod.Services
                 {
                     SpeechManager.Announce(
                         L.Get("video_tape.target_x_of_y", index + 1, total),
-                        TextType.Investigation
+                        GameTextType.Investigation
                     );
                 }
                 else
                 {
                     SpeechManager.Announce(
                         L.Get("video_tape.target_needs_adjustment", index + 1, total),
-                        TextType.Investigation
+                        GameTextType.Investigation
                     );
                 }
             }

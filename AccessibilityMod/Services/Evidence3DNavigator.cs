@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 using UnityEngine;
 
 namespace AccessibilityMod.Services
@@ -100,7 +101,7 @@ namespace AccessibilityMod.Services
                     int zoomPercent = (int)(currentZoom * 100);
                     SpeechManager.Announce(
                         L.Get("evidence_3d.zoom_percent", zoomPercent),
-                        TextType.Menu
+                        GameTextType.Menu
                     );
                 }
             }
@@ -233,7 +234,7 @@ namespace AccessibilityMod.Services
 
             if (_hotspots.Count == 0)
             {
-                SpeechManager.Announce(L.Get("evidence_3d.no_hotspots"), TextType.Menu);
+                SpeechManager.Announce(L.Get("evidence_3d.no_hotspots"), GameTextType.Menu);
                 return;
             }
 
@@ -253,7 +254,7 @@ namespace AccessibilityMod.Services
 
             if (_hotspots.Count == 0)
             {
-                SpeechManager.Announce(L.Get("evidence_3d.no_hotspots"), TextType.Menu);
+                SpeechManager.Announce(L.Get("evidence_3d.no_hotspots"), GameTextType.Menu);
                 return;
             }
 
@@ -736,7 +737,7 @@ namespace AccessibilityMod.Services
                     _currentHotspotIndex + 1,
                     _hotspots.Count
                 );
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -744,7 +745,7 @@ namespace AccessibilityMod.Services
                     $"Error navigating to hotspot: {ex.Message}\n{ex.StackTrace}"
                 );
                 // Still announce even if navigation failed
-                SpeechManager.Announce(hotspot.Name, TextType.Menu);
+                SpeechManager.Announce(hotspot.Name, GameTextType.Menu);
             }
         }
 
@@ -892,14 +893,14 @@ namespace AccessibilityMod.Services
                     message += " " + L.Get("evidence_3d.use_brackets");
                 }
 
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
             }
             catch (Exception ex)
             {
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Error(
                     $"Error announcing 3D state: {ex.Message}"
                 );
-                SpeechManager.Announce(L.Get("evidence_3d.unable_to_read"), TextType.Menu);
+                SpeechManager.Announce(L.Get("evidence_3d.unable_to_read"), GameTextType.Menu);
             }
         }
 
@@ -911,7 +912,7 @@ namespace AccessibilityMod.Services
             string zoomLevel = GetZoomLevel();
             SpeechManager.Announce(
                 L.Get("evidence_3d.zoom_percent", int.Parse(zoomLevel.Replace("%", ""))),
-                TextType.Menu
+                GameTextType.Menu
             );
         }
 
@@ -922,11 +923,11 @@ namespace AccessibilityMod.Services
         {
             if (IsOverHotspot())
             {
-                SpeechManager.Announce(L.Get("evidence_3d.hotspot_detected"), TextType.Menu);
+                SpeechManager.Announce(L.Get("evidence_3d.hotspot_detected"), GameTextType.Menu);
             }
             else
             {
-                SpeechManager.Announce(L.Get("evidence_3d.no_hotspot_cursor"), TextType.Menu);
+                SpeechManager.Announce(L.Get("evidence_3d.no_hotspot_cursor"), GameTextType.Menu);
             }
         }
 

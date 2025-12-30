@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 using UnityEngine;
 
 namespace AccessibilityMod.Services
@@ -78,13 +79,13 @@ namespace AccessibilityMod.Services
                     + L.Get("navigation.use_brackets_navigate")
                     + ", "
                     + L.Get("navigation.use_e_present");
-                SpeechManager.Announce(message, TextType.Trial);
+                SpeechManager.Announce(message, GameTextType.Trial);
             }
             else
             {
                 SpeechManager.Announce(
                     L.Get("mode.pointing") + ". Use arrow keys to move cursor, E to present.",
-                    TextType.Trial
+                    GameTextType.Trial
                 );
             }
         }
@@ -206,7 +207,7 @@ namespace AccessibilityMod.Services
         {
             if (!IsPointingActive())
             {
-                SpeechManager.Announce(L.Get("pointing.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("pointing.not_in_mode"), GameTextType.SystemMessage);
                 return;
             }
 
@@ -217,7 +218,7 @@ namespace AccessibilityMod.Services
 
             if (_points.Count == 0)
             {
-                SpeechManager.Announce(L.Get("navigation.no_target_areas"), TextType.Trial);
+                SpeechManager.Announce(L.Get("navigation.no_target_areas"), GameTextType.Trial);
                 return;
             }
 
@@ -233,7 +234,7 @@ namespace AccessibilityMod.Services
         {
             if (!IsPointingActive())
             {
-                SpeechManager.Announce(L.Get("pointing.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("pointing.not_in_mode"), GameTextType.SystemMessage);
                 return;
             }
 
@@ -244,7 +245,7 @@ namespace AccessibilityMod.Services
 
             if (_points.Count == 0)
             {
-                SpeechManager.Announce(L.Get("navigation.no_target_areas"), TextType.Trial);
+                SpeechManager.Announce(L.Get("navigation.no_target_areas"), GameTextType.Trial);
                 return;
             }
 
@@ -260,12 +261,12 @@ namespace AccessibilityMod.Services
         {
             if (_points.Count == 0 || _currentIndex >= _points.Count)
             {
-                SpeechManager.Announce(L.Get("navigation.no_point_selected"), TextType.Trial);
+                SpeechManager.Announce(L.Get("navigation.no_point_selected"), GameTextType.Trial);
                 return;
             }
 
             var point = _points[_currentIndex];
-            SpeechManager.Announce(point.Description, TextType.Trial);
+            SpeechManager.Announce(point.Description, GameTextType.Trial);
         }
 
         /// <summary>
@@ -275,7 +276,7 @@ namespace AccessibilityMod.Services
         {
             if (!IsPointingActive())
             {
-                SpeechManager.Announce(L.Get("pointing.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(L.Get("pointing.not_in_mode"), GameTextType.SystemMessage);
                 return;
             }
 
@@ -286,7 +287,7 @@ namespace AccessibilityMod.Services
 
             if (_points.Count == 0)
             {
-                SpeechManager.Announce(L.Get("navigation.no_target_areas"), TextType.Trial);
+                SpeechManager.Announce(L.Get("navigation.no_target_areas"), GameTextType.Trial);
                 return;
             }
 
@@ -298,7 +299,7 @@ namespace AccessibilityMod.Services
             }
             summary += string.Join(", ", descriptions.ToArray());
 
-            SpeechManager.Announce(summary, TextType.Trial);
+            SpeechManager.Announce(summary, GameTextType.Trial);
         }
 
         /// <summary>

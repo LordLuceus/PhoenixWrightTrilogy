@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 using UnityEngine;
 
 namespace AccessibilityMod.Services
@@ -320,7 +321,7 @@ namespace AccessibilityMod.Services
 
                 if (!string.IsNullOrEmpty(announcement))
                 {
-                    SpeechManager.Announce(announcement, TextType.Investigation);
+                    SpeechManager.Announce(announcement, GameTextType.Investigation);
                 }
             }
             catch
@@ -359,13 +360,13 @@ namespace AccessibilityMod.Services
 
         private static void OnPowderStart()
         {
-            SpeechManager.Announce(L.Get("fingerprint.powder_phase"), TextType.Investigation);
+            SpeechManager.Announce(L.Get("fingerprint.powder_phase"), GameTextType.Investigation);
         }
 
         private static void OnFingerprintStart()
         {
             int count = GetFingerprintLocationCount();
-            SpeechManager.Announce(L.Get("fingerprint.start", count), TextType.Investigation);
+            SpeechManager.Announce(L.Get("fingerprint.start", count), GameTextType.Investigation);
         }
 
         private static void OnFingerprintEnd()
@@ -376,7 +377,10 @@ namespace AccessibilityMod.Services
         private static void OnComparisonStart()
         {
             _lastCompCursor = -1;
-            SpeechManager.Announce(L.Get("fingerprint.comparison_start"), TextType.Investigation);
+            SpeechManager.Announce(
+                L.Get("fingerprint.comparison_start"),
+                GameTextType.Investigation
+            );
         }
 
         /// <summary>
@@ -386,7 +390,10 @@ namespace AccessibilityMod.Services
         {
             if (!IsFingerprintActive())
             {
-                SpeechManager.Announce(L.Get("fingerprint.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.not_in_mode"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
@@ -406,7 +413,7 @@ namespace AccessibilityMod.Services
             {
                 SpeechManager.Announce(
                     L.Get("fingerprint.navigation_hint"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
         }
@@ -416,7 +423,7 @@ namespace AccessibilityMod.Services
             int count = GetFingerprintLocationCount();
             SpeechManager.Announce(
                 L.Get("fingerprint.selection_hint", count),
-                TextType.Investigation
+                GameTextType.Investigation
             );
         }
 
@@ -429,12 +436,15 @@ namespace AccessibilityMod.Services
             if (!string.IsNullOrEmpty(regionHint))
             {
                 // Show which regions need more powder
-                SpeechManager.Announce(regionHint, TextType.Investigation);
+                SpeechManager.Announce(regionHint, GameTextType.Investigation);
             }
             else
             {
                 // Standard hint
-                SpeechManager.Announce(L.Get("fingerprint.powder_hint"), TextType.Investigation);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.powder_hint"),
+                    GameTextType.Investigation
+                );
             }
         }
 
@@ -676,7 +686,10 @@ namespace AccessibilityMod.Services
 
         private static void AnnounceComparisonHint()
         {
-            SpeechManager.Announce(L.Get("fingerprint.comparison_hint"), TextType.Investigation);
+            SpeechManager.Announce(
+                L.Get("fingerprint.comparison_hint"),
+                GameTextType.Investigation
+            );
         }
 
         /// <summary>
@@ -705,7 +718,7 @@ namespace AccessibilityMod.Services
                         string name = GetComparisonCharacterName(cursor);
                         if (name != null)
                         {
-                            SpeechManager.Announce(name, TextType.Investigation);
+                            SpeechManager.Announce(name, GameTextType.Investigation);
                         }
                     }
                 }
@@ -723,7 +736,10 @@ namespace AccessibilityMod.Services
         {
             if (!IsFingerprintActive())
             {
-                SpeechManager.Announce(L.Get("fingerprint.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.not_in_mode"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
@@ -745,7 +761,7 @@ namespace AccessibilityMod.Services
                         {
                             SpeechManager.Announce(
                                 L.Get("fingerprint.comparison_state", name),
-                                TextType.Investigation
+                                GameTextType.Investigation
                             );
                             return;
                         }
@@ -758,12 +774,15 @@ namespace AccessibilityMod.Services
 
                 SpeechManager.Announce(
                     L.Get("fingerprint.comparison_phase"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
             else if (IsInPowderPhase())
             {
-                SpeechManager.Announce(L.Get("fingerprint.powder_state"), TextType.Investigation);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.powder_state"),
+                    GameTextType.Investigation
+                );
             }
             else if (IsInSelectionPhase())
             {
@@ -775,14 +794,14 @@ namespace AccessibilityMod.Services
                         : L.Get("fingerprint.location_count", count) + " ";
                 SpeechManager.Announce(
                     L.Get("fingerprint.selection_state", locationInfo),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
             else
             {
                 SpeechManager.Announce(
                     L.Get("fingerprint.examination_state"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
         }
@@ -826,20 +845,29 @@ namespace AccessibilityMod.Services
         {
             if (!IsFingerprintActive())
             {
-                SpeechManager.Announce(L.Get("fingerprint.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.not_in_mode"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
             if (!IsInSelectionPhase())
             {
-                SpeechManager.Announce(L.Get("fingerprint.selection_only"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.selection_only"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
             int count = GetFingerprintLocationCount();
             if (count == 0)
             {
-                SpeechManager.Announce(L.Get("fingerprint.no_locations"), TextType.Investigation);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.no_locations"),
+                    GameTextType.Investigation
+                );
                 return;
             }
 
@@ -854,20 +882,29 @@ namespace AccessibilityMod.Services
         {
             if (!IsFingerprintActive())
             {
-                SpeechManager.Announce(L.Get("fingerprint.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.not_in_mode"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
             if (!IsInSelectionPhase())
             {
-                SpeechManager.Announce(L.Get("fingerprint.selection_only"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.selection_only"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
             int count = GetFingerprintLocationCount();
             if (count == 0)
             {
-                SpeechManager.Announce(L.Get("fingerprint.no_locations"), TextType.Investigation);
+                SpeechManager.Announce(
+                    L.Get("fingerprint.no_locations"),
+                    GameTextType.Investigation
+                );
                 return;
             }
 
@@ -907,7 +944,7 @@ namespace AccessibilityMod.Services
                         count,
                         positionDesc
                     ),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
             catch (Exception ex)

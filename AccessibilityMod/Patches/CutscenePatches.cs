@@ -4,6 +4,7 @@ using System.Reflection;
 using System.Text;
 using AccessibilityMod.Core;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -247,7 +248,7 @@ namespace AccessibilityMod.Patches
                 _lastDemoText = text;
 
                 // Output as narrator (no speaker name for opening narration)
-                SpeechManager.Output("", text, TextType.Narrator);
+                SpeechManager.Output("", text, GameTextType.Narrator);
 
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Msg(
                     $"Opening text captured: {text}"
@@ -561,7 +562,7 @@ namespace AccessibilityMod.Patches
                 string line = _openingLines[lineIndex];
                 if (!Net35Extensions.IsNullOrWhiteSpace(line))
                 {
-                    SpeechManager.Output("", line, TextType.Narrator);
+                    SpeechManager.Output("", line, GameTextType.Narrator);
                 }
             }
         }

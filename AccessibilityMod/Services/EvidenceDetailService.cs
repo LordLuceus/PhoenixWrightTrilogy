@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Services
 {

@@ -4,6 +4,7 @@ using System.Reflection;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 using UnityEngine.UI;
 
 namespace AccessibilityMod.Patches
@@ -24,7 +25,7 @@ namespace AccessibilityMod.Patches
                 string message = GetMessageBoxText(__instance);
                 if (!Net35Extensions.IsNullOrWhiteSpace(message))
                 {
-                    SpeechManager.Announce(message, TextType.Menu);
+                    SpeechManager.Announce(message, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -79,7 +80,7 @@ namespace AccessibilityMod.Patches
                 string message = GetSavePriorConfirmationText(__instance);
                 if (!Net35Extensions.IsNullOrWhiteSpace(message))
                 {
-                    SpeechManager.Announce(message, TextType.Menu);
+                    SpeechManager.Announce(message, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -132,7 +133,7 @@ namespace AccessibilityMod.Patches
                 string message = TextDataCtrl.GetText(TextDataCtrl.SaveTextID.ADD_NEW_EPISODE);
                 if (!Net35Extensions.IsNullOrWhiteSpace(message))
                 {
-                    SpeechManager.Announce(message, TextType.Dialogue);
+                    SpeechManager.Announce(message, GameTextType.Dialogue);
                 }
             }
             catch (Exception ex)
@@ -157,7 +158,7 @@ namespace AccessibilityMod.Patches
                     string optionText = GetOptionSaveText(__instance, cursorNum);
                     if (!Net35Extensions.IsNullOrWhiteSpace(optionText))
                     {
-                        SpeechManager.Announce(optionText, TextType.Menu);
+                        SpeechManager.Announce(optionText, GameTextType.Menu);
                     }
                 }
             }
@@ -180,7 +181,7 @@ namespace AccessibilityMod.Patches
                 string optionText = GetOptionSaveText(__instance, 0);
                 if (!Net35Extensions.IsNullOrWhiteSpace(optionText))
                 {
-                    SpeechManager.Announce(optionText, TextType.Menu);
+                    SpeechManager.Announce(optionText, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -255,7 +256,7 @@ namespace AccessibilityMod.Patches
                 var slotType = GetSlotType(__instance);
                 string typeName = slotType == 0 ? L.Get("save_load.save") : L.Get("save_load.load");
 
-                SpeechManager.Announce(L.Get("save_load.menu_opened", typeName), TextType.Menu);
+                SpeechManager.Announce(L.Get("save_load.menu_opened", typeName), GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -282,7 +283,7 @@ namespace AccessibilityMod.Patches
                 string message = GetSaveConfirmationMessage(__instance);
                 if (!Net35Extensions.IsNullOrWhiteSpace(message))
                 {
-                    SpeechManager.Announce(message, TextType.Menu);
+                    SpeechManager.Announce(message, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -374,7 +375,7 @@ namespace AccessibilityMod.Patches
                 {
                     SpeechManager.Announce(
                         L.Get("save_load.slot_no_data", slotNo + 1),
-                        TextType.Menu
+                        GameTextType.Menu
                     );
                     return;
                 }
@@ -459,7 +460,7 @@ namespace AccessibilityMod.Patches
                     );
                 }
 
-                SpeechManager.Announce(slotInfo, TextType.Menu);
+                SpeechManager.Announce(slotInfo, GameTextType.Menu);
             }
             catch (Exception ex)
             {
@@ -533,7 +534,7 @@ namespace AccessibilityMod.Patches
                     string categoryName = GetCategoryName(cat);
                     SpeechManager.Announce(
                         L.Get("save_load.options_category", categoryName),
-                        TextType.Menu
+                        GameTextType.Menu
                     );
 
                     // Schedule delayed tooltip announcement for category
@@ -575,7 +576,7 @@ namespace AccessibilityMod.Patches
                 else
                     message = optionName;
 
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
 
                 // Schedule delayed tooltip announcement
                 ScheduleTooltipAnnouncement(__instance);
@@ -598,7 +599,7 @@ namespace AccessibilityMod.Patches
                 CoroutineRunner.Instance.ScheduleDelayedAnnouncement(
                     TooltipDelay,
                     () => GetTooltipText(instance),
-                    TextType.Menu
+                    GameTextType.Menu
                 );
             }
             catch (Exception ex)
@@ -622,7 +623,7 @@ namespace AccessibilityMod.Patches
                 CoroutineRunner.Instance.ScheduleDelayedAnnouncement(
                     TooltipDelay,
                     () => GetCategoryTooltipText(instance, category),
-                    TextType.Menu
+                    GameTextType.Menu
                 );
             }
             catch (Exception ex)
@@ -1090,7 +1091,7 @@ namespace AccessibilityMod.Patches
                 string value = GetOptionValue(item);
                 if (!Net35Extensions.IsNullOrWhiteSpace(value))
                 {
-                    SpeechManager.Announce(value, TextType.Menu);
+                    SpeechManager.Announce(value, GameTextType.Menu);
                 }
             }
             catch (Exception ex)

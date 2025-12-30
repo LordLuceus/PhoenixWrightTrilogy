@@ -4,6 +4,7 @@ using System.Reflection;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -153,7 +154,7 @@ namespace AccessibilityMod.Patches
                     if (!Net35Extensions.IsNullOrWhiteSpace(songTitle))
                     {
                         string announcement = L.Get("orchestra.track", index + 1, songTitle);
-                        SpeechManager.Announce(announcement, TextType.Menu);
+                        SpeechManager.Announce(announcement, GameTextType.Menu);
                     }
                 }
                 catch (Exception ex)
@@ -190,7 +191,7 @@ namespace AccessibilityMod.Patches
                 string albumName = GetAlbumName(title);
                 if (!Net35Extensions.IsNullOrWhiteSpace(albumName))
                 {
-                    SpeechManager.Announce(albumName, TextType.Menu);
+                    SpeechManager.Announce(albumName, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -228,7 +229,7 @@ namespace AccessibilityMod.Patches
                 if (!Net35Extensions.IsNullOrWhiteSpace(modeName))
                 {
                     string announcement = L.Get("orchestra.play_mode", modeName);
-                    SpeechManager.Announce(announcement, TextType.Menu);
+                    SpeechManager.Announce(announcement, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -267,7 +268,7 @@ namespace AccessibilityMod.Patches
                 if (!Net35Extensions.IsNullOrWhiteSpace(songTitle))
                 {
                     string announcement = L.Get("orchestra.now_playing", songTitle);
-                    SpeechManager.Announce(announcement, TextType.Menu);
+                    SpeechManager.Announce(announcement, GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -287,7 +288,7 @@ namespace AccessibilityMod.Patches
                 // Only announce manual stops
                 if (manual_select)
                 {
-                    SpeechManager.Announce(L.Get("orchestra.stopped"), TextType.Menu);
+                    SpeechManager.Announce(L.Get("orchestra.stopped"), GameTextType.Menu);
                 }
             }
             catch (Exception ex)
@@ -310,7 +311,7 @@ namespace AccessibilityMod.Patches
             {
                 _isOrchestraActive = true;
                 ResetState();
-                SpeechManager.Announce(L.Get("orchestra.opened"), TextType.Menu);
+                SpeechManager.Announce(L.Get("orchestra.opened"), GameTextType.Menu);
             }
             catch (Exception ex)
             {

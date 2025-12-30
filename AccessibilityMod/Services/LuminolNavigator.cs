@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 using UnityEngine;
 
 namespace AccessibilityMod.Services
@@ -119,7 +120,7 @@ namespace AccessibilityMod.Services
                     // Just entered Acquired state - announce prompt
                     SpeechManager.Announce(
                         L.Get("navigation.press_enter_examine"),
-                        TextType.Investigation
+                        GameTextType.Investigation
                     );
                 }
 
@@ -161,13 +162,13 @@ namespace AccessibilityMod.Services
                     + ", "
                     + L.Get("luminol.spray_key_hint")
                     + scrollHint;
-                SpeechManager.Announce(message, TextType.Investigation);
+                SpeechManager.Announce(message, GameTextType.Investigation);
             }
             else
             {
                 SpeechManager.Announce(
                     L.Get("mode.luminol") + ". " + L.Get("luminol.controls_hint_generic"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
         }
@@ -343,7 +344,7 @@ namespace AccessibilityMod.Services
             {
                 SpeechManager.Announce(
                     L.Get("system.not_in_mode", L.Get("mode.luminol")),
-                    TextType.SystemMessage
+                    GameTextType.SystemMessage
                 );
                 return;
             }
@@ -355,7 +356,7 @@ namespace AccessibilityMod.Services
 
             if (_hotspots.Count == 0)
             {
-                SpeechManager.Announce(L.Get("luminol.no_traces"), TextType.Investigation);
+                SpeechManager.Announce(L.Get("luminol.no_traces"), GameTextType.Investigation);
                 return;
             }
 
@@ -393,7 +394,7 @@ namespace AccessibilityMod.Services
             {
                 SpeechManager.Announce(
                     L.Get("system.not_in_mode", L.Get("mode.luminol")),
-                    TextType.SystemMessage
+                    GameTextType.SystemMessage
                 );
                 return;
             }
@@ -405,7 +406,7 @@ namespace AccessibilityMod.Services
 
             if (_hotspots.Count == 0)
             {
-                SpeechManager.Announce(L.Get("luminol.no_traces"), TextType.Investigation);
+                SpeechManager.Announce(L.Get("luminol.no_traces"), GameTextType.Investigation);
                 return;
             }
 
@@ -473,7 +474,7 @@ namespace AccessibilityMod.Services
                     : L.Get("position.left");
                 SpeechManager.Announce(
                     hotspot.Description + ". " + L.Get("luminol.pan_direction_first", scrollDir),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
             else
@@ -493,13 +494,13 @@ namespace AccessibilityMod.Services
             {
                 SpeechManager.Announce(
                     L.Get("navigation.no_point_selected"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
                 return;
             }
 
             var hotspot = _hotspots[_currentIndex];
-            SpeechManager.Announce(hotspot.Description, TextType.Investigation);
+            SpeechManager.Announce(hotspot.Description, GameTextType.Investigation);
         }
 
         /// <summary>
@@ -573,7 +574,7 @@ namespace AccessibilityMod.Services
                     ? L.Get("luminol.trace_discovered", remaining)
                     : L.Get("luminol.all_discovered");
 
-            SpeechManager.Announce(message, TextType.Investigation);
+            SpeechManager.Announce(message, GameTextType.Investigation);
         }
 
         /// <summary>
@@ -616,7 +617,7 @@ namespace AccessibilityMod.Services
             {
                 SpeechManager.Announce(
                     L.Get("system.not_in_mode", L.Get("mode.luminol")),
-                    TextType.SystemMessage
+                    GameTextType.SystemMessage
                 );
                 return;
             }
@@ -635,7 +636,7 @@ namespace AccessibilityMod.Services
                 + L.Get("navigation.use_brackets_navigate")
                 + "."
                 + scrollHint;
-            SpeechManager.Announce(message, TextType.Investigation);
+            SpeechManager.Announce(message, GameTextType.Investigation);
         }
     }
 }

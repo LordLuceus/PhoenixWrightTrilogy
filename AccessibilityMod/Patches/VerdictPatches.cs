@@ -1,6 +1,7 @@
 using System;
 using AccessibilityMod.Core;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {

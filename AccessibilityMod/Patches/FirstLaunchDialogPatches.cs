@@ -4,6 +4,7 @@ using System.Reflection;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -87,7 +88,7 @@ namespace AccessibilityMod.Patches
                 {
                     announcement += ". " + messageContent;
                 }
-                SpeechManager.Announce(announcement, TextType.Menu);
+                SpeechManager.Announce(announcement, GameTextType.Menu);
 
                 // Announce the default cursor position (starts at 1 = Privacy Policy / Detail)
                 // Use delayed announcement so it comes after the dialog opened message
@@ -103,7 +104,7 @@ namespace AccessibilityMod.Patches
                         }
                         return null;
                     },
-                    TextType.Menu
+                    GameTextType.Menu
                 );
             }
             catch (Exception ex)
@@ -194,7 +195,7 @@ namespace AccessibilityMod.Patches
             string optionText = GetTermsOptionText(cursorNo);
             if (!Net35Extensions.IsNullOrWhiteSpace(optionText))
             {
-                SpeechManager.Announce(optionText, TextType.Menu);
+                SpeechManager.Announce(optionText, GameTextType.Menu);
             }
         }
 
@@ -220,7 +221,7 @@ namespace AccessibilityMod.Patches
                 {
                     announcement += ". " + messageContent;
                 }
-                SpeechManager.Announce(announcement, TextType.Menu);
+                SpeechManager.Announce(announcement, GameTextType.Menu);
             }
             catch (Exception ex)
             {

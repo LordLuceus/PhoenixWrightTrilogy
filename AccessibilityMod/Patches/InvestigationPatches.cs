@@ -2,6 +2,7 @@ using System;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -80,14 +81,14 @@ namespace AccessibilityMod.Patches
                             // Hovering over unexamined hotspot
                             SpeechManager.Announce(
                                 L.Get("investigation.point_of_interest"),
-                                TextType.Investigation
+                                GameTextType.Investigation
                             );
                             break;
                         case 3:
                             // Hovering over already examined hotspot
                             SpeechManager.Announce(
                                 L.Get("investigation.already_examined"),
-                                TextType.Investigation
+                                GameTextType.Investigation
                             );
                             break;
                         // case 0: Normal cursor - don't announce
@@ -158,7 +159,7 @@ namespace AccessibilityMod.Patches
                             return null;
                         return L.Get("menu.move_prefix") + locationName;
                     },
-                    TextType.Menu
+                    GameTextType.Menu
                 );
             }
             catch (Exception ex)
@@ -208,7 +209,7 @@ namespace AccessibilityMod.Patches
                                 return null;
                             return locationName;
                         },
-                        TextType.Menu
+                        GameTextType.Menu
                     );
                 }
             }

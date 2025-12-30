@@ -2,6 +2,7 @@ using System;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -107,7 +108,7 @@ namespace AccessibilityMod.Patches
                 _lastAnnouncedLockCount = _totalLocks;
 
                 string message = L.GetPlural("psyche_lock.total", _totalLocks);
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
 
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Msg(
                     $"Psyche-Lock initialized with {_totalLocks} locks"
@@ -152,7 +153,7 @@ namespace AccessibilityMod.Patches
                     message = L.GetPlural("psyche_lock.broken_remaining", remaining);
                 }
 
-                SpeechManager.Announce(message, TextType.Menu);
+                SpeechManager.Announce(message, GameTextType.Menu);
 
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Msg(
                     $"Psyche-Lock broken, {remaining} remaining"
@@ -173,7 +174,7 @@ namespace AccessibilityMod.Patches
         {
             try
             {
-                SpeechManager.Announce(L.Get("psyche_lock.all_broken"), TextType.Menu);
+                SpeechManager.Announce(L.Get("psyche_lock.all_broken"), GameTextType.Menu);
                 _lastAnnouncedLockCount = -1;
                 _totalLocks = 0;
 

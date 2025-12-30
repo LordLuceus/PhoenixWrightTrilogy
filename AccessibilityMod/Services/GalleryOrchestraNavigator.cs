@@ -1,6 +1,7 @@
 using System;
 using AccessibilityMod.Core;
 using AccessibilityMod.Patches;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Services
 {
@@ -30,7 +31,7 @@ namespace AccessibilityMod.Services
                 var instance = UnityEngine.Object.FindObjectOfType<GalleryOrchestraCtrl>();
                 if (instance == null)
                 {
-                    SpeechManager.Announce(L.Get("orchestra.music_player"), TextType.Menu);
+                    SpeechManager.Announce(L.Get("orchestra.music_player"), GameTextType.Menu);
                     return;
                 }
 
@@ -67,14 +68,14 @@ namespace AccessibilityMod.Services
                     announcement += ". " + L.Get("orchestra.mode", state.PlayModeName);
                 }
 
-                SpeechManager.Announce(announcement, TextType.Menu);
+                SpeechManager.Announce(announcement, GameTextType.Menu);
             }
             catch (Exception ex)
             {
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Error(
                     $"Error announcing orchestra state: {ex.Message}"
                 );
-                SpeechManager.Announce(L.Get("orchestra.music_player"), TextType.Menu);
+                SpeechManager.Announce(L.Get("orchestra.music_player"), GameTextType.Menu);
             }
         }
 
@@ -83,7 +84,7 @@ namespace AccessibilityMod.Services
         /// </summary>
         public static void AnnounceHelp()
         {
-            SpeechManager.Announce(L.Get("orchestra.controls_help"), TextType.Menu);
+            SpeechManager.Announce(L.Get("orchestra.controls_help"), GameTextType.Menu);
         }
     }
 }

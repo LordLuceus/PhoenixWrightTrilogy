@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 using UnityEngine;
 
 namespace AccessibilityMod.Patches
@@ -316,7 +317,7 @@ namespace AccessibilityMod.Patches
             )
             {
                 _lastAnnouncedText = text;
-                SpeechManager.Output("", text, TextType.Narrator);
+                SpeechManager.Output("", text, GameTextType.Narrator);
             }
         }
 
@@ -577,7 +578,7 @@ namespace AccessibilityMod.Patches
                     }
                 }
 
-                SpeechManager.Output(speakerName, text, TextType.Dialogue);
+                SpeechManager.Output(speakerName, text, GameTextType.Dialogue);
             }
             catch (Exception ex)
             {

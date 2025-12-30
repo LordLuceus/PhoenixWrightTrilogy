@@ -2,6 +2,7 @@ using System.Reflection;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -60,7 +61,7 @@ namespace AccessibilityMod.Patches
                         string buttonName =
                             buttonValue == 10 ? L.Get("safe_keypad.back") : buttonValue.ToString();
 
-                        SpeechManager.Announce(buttonName, TextType.Menu);
+                        SpeechManager.Announce(buttonName, GameTextType.Menu);
                     }
                 }
             }
@@ -79,7 +80,7 @@ namespace AccessibilityMod.Patches
         {
             _lastCursorX = -1;
             _lastCursorY = -1;
-            SpeechManager.Announce(L.Get("safe_keypad.opened"), TextType.Menu);
+            SpeechManager.Announce(L.Get("safe_keypad.opened"), GameTextType.Menu);
         }
 
         /// <summary>
@@ -93,12 +94,12 @@ namespace AccessibilityMod.Patches
             {
                 if (num == 10)
                 {
-                    SpeechManager.Announce(L.Get("safe_keypad.deleted"), TextType.Menu);
+                    SpeechManager.Announce(L.Get("safe_keypad.deleted"), GameTextType.Menu);
                 }
                 else
                 {
                     // Number entered - the game plays a sound, we just confirm
-                    SpeechManager.Announce(L.Get("safe_keypad.entered", num), TextType.Menu);
+                    SpeechManager.Announce(L.Get("safe_keypad.entered", num), GameTextType.Menu);
                 }
             }
             catch

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using AccessibilityMod.Core;
+using MelonAccessibilityLib;
 using UnityEngine;
 
 namespace AccessibilityMod.Services
@@ -188,7 +189,7 @@ namespace AccessibilityMod.Services
                     break;
             }
 
-            SpeechManager.Announce(startMessage, TextType.Investigation);
+            SpeechManager.Announce(startMessage, GameTextType.Investigation);
         }
 
         private static void OnEnd()
@@ -228,7 +229,10 @@ namespace AccessibilityMod.Services
         {
             if (!IsActive())
             {
-                SpeechManager.Announce(L.Get("dying_message.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("dying_message.not_in_mode"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
@@ -247,7 +251,10 @@ namespace AccessibilityMod.Services
         {
             if (!IsActive())
             {
-                SpeechManager.Announce(L.Get("dying_message.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("dying_message.not_in_mode"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
@@ -310,7 +317,7 @@ namespace AccessibilityMod.Services
                 string description = GetDotDescription(_currentDotIndex);
                 SpeechManager.Announce(
                     L.Get("dying_message.dot_description", _currentDotIndex + 1, description),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
             catch (Exception ex)
@@ -379,7 +386,10 @@ namespace AccessibilityMod.Services
         {
             if (!IsActive())
             {
-                SpeechManager.Announce(L.Get("dying_message.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("dying_message.not_in_mode"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
@@ -421,13 +431,13 @@ namespace AccessibilityMod.Services
                         break;
                 }
 
-                SpeechManager.Announce(hint, TextType.Investigation);
+                SpeechManager.Announce(hint, GameTextType.Investigation);
             }
             catch
             {
                 SpeechManager.Announce(
                     L.Get("dying_message.hint_fallback"),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
         }
@@ -509,7 +519,10 @@ namespace AccessibilityMod.Services
         {
             if (!IsActive())
             {
-                SpeechManager.Announce(L.Get("dying_message.not_in_mode"), TextType.SystemMessage);
+                SpeechManager.Announce(
+                    L.Get("dying_message.not_in_mode"),
+                    GameTextType.SystemMessage
+                );
                 return;
             }
 
@@ -577,12 +590,15 @@ namespace AccessibilityMod.Services
 
                 SpeechManager.Announce(
                     L.Get("dying_message.state", locationInfo, lineCount, stateStr),
-                    TextType.Investigation
+                    GameTextType.Investigation
                 );
             }
             catch
             {
-                SpeechManager.Announce(L.Get("dying_message.hint_generic"), TextType.Investigation);
+                SpeechManager.Announce(
+                    L.Get("dying_message.hint_generic"),
+                    GameTextType.Investigation
+                );
             }
         }
 
@@ -595,7 +611,7 @@ namespace AccessibilityMod.Services
             string toDesc = GetDotDescription(to);
             SpeechManager.Announce(
                 L.Get("dying_message.connected", from + 1, fromDesc, to + 1, toDesc),
-                TextType.Investigation
+                GameTextType.Investigation
             );
         }
 
@@ -604,7 +620,7 @@ namespace AccessibilityMod.Services
         /// </summary>
         public static void OnLineDeleted()
         {
-            SpeechManager.Announce(L.Get("dying_message.line_removed"), TextType.Investigation);
+            SpeechManager.Announce(L.Get("dying_message.line_removed"), GameTextType.Investigation);
         }
 
         /// <summary>
@@ -615,7 +631,7 @@ namespace AccessibilityMod.Services
             string desc = GetDotDescription(dotIndex);
             SpeechManager.Announce(
                 L.Get("dying_message.line_started", dotIndex + 1, desc),
-                TextType.Investigation
+                GameTextType.Investigation
             );
         }
 
@@ -624,7 +640,10 @@ namespace AccessibilityMod.Services
         /// </summary>
         public static void OnLineCancelled()
         {
-            SpeechManager.Announce(L.Get("dying_message.line_cancelled"), TextType.Investigation);
+            SpeechManager.Announce(
+                L.Get("dying_message.line_cancelled"),
+                GameTextType.Investigation
+            );
         }
     }
 }

@@ -2,6 +2,7 @@ using System.Reflection;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
 using HarmonyLib;
+using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
 {
@@ -50,14 +51,14 @@ namespace AccessibilityMod.Patches
                         {
                             SpeechManager.Announce(
                                 L.Get("vase.puzzle_complete"),
-                                TextType.Investigation
+                                GameTextType.Investigation
                             );
                         }
                         else
                         {
                             SpeechManager.Announce(
                                 L.Get("vase.piece_placed", remaining),
-                                TextType.Investigation
+                                GameTextType.Investigation
                             );
                         }
                     }
@@ -103,7 +104,10 @@ namespace AccessibilityMod.Patches
                     // Proc.union_failure = 5
                     if (procId == 5)
                     {
-                        SpeechManager.Announce(L.Get("vase.wrong_piece"), TextType.Investigation);
+                        SpeechManager.Announce(
+                            L.Get("vase.wrong_piece"),
+                            GameTextType.Investigation
+                        );
                     }
                 }
             }
@@ -136,7 +140,7 @@ namespace AccessibilityMod.Patches
                         int rotation = pieces[i].angle_id * 90;
                         SpeechManager.Announce(
                             L.Get("vase.piece_rotation", displayNumber, rotation),
-                            TextType.Investigation
+                            GameTextType.Investigation
                         );
                     }
                 }
@@ -195,7 +199,7 @@ namespace AccessibilityMod.Patches
                         int rotation = pieces[cursor].angle_id * 90;
                         SpeechManager.Announce(
                             L.Get("vase.piece_rotation", displayNumber, rotation),
-                            TextType.Investigation
+                            GameTextType.Investigation
                         );
                     }
                 }
