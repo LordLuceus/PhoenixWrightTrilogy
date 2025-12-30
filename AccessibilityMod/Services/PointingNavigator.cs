@@ -14,7 +14,7 @@ namespace AccessibilityMod.Services
     public static class PointingNavigator
     {
         private static List<PointInfo> _points = new List<PointInfo>();
-        private static int _currentIndex = 0;
+        private static int _currentIndex = -1;
         private static bool _wasRunning = false;
 
         public class PointInfo
@@ -93,7 +93,7 @@ namespace AccessibilityMod.Services
         private static void OnPointingEnd()
         {
             _points.Clear();
-            _currentIndex = 0;
+            _currentIndex = -1;
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace AccessibilityMod.Services
         public static void RefreshPoints()
         {
             _points.Clear();
-            _currentIndex = 0;
+            _currentIndex = -1;
 
             try
             {
