@@ -10,7 +10,7 @@ namespace AccessibilityMod.Services
     public static class HotspotNavigator
     {
         private static List<HotspotInfo> _hotspots = new List<HotspotInfo>();
-        private static int _currentIndex = 0;
+        private static int _currentIndex = -1;
 
         public class HotspotInfo
         {
@@ -98,7 +98,7 @@ namespace AccessibilityMod.Services
                 }
 
                 // Restore position to previously selected hotspot if it still exists
-                _currentIndex = 0;
+                _currentIndex = -1;
                 if (previousMessageId.HasValue && _hotspots.Count > 0)
                 {
                     for (int i = 0; i < _hotspots.Count; i++)
@@ -117,7 +117,7 @@ namespace AccessibilityMod.Services
             }
             catch (Exception ex)
             {
-                _currentIndex = 0;
+                _currentIndex = -1;
                 AccessibilityMod.Core.AccessibilityMod.Logger?.Error(
                     $"Error refreshing hotspots: {ex.Message}"
                 );
