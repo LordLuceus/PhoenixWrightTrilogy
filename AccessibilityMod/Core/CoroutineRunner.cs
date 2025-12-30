@@ -30,7 +30,6 @@ namespace AccessibilityMod.Core
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
-                SpeechManager.Initialize();
             }
             else
             {
