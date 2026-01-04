@@ -191,12 +191,7 @@ class Program
             // Step 5: Install mod files
             var stepNum = options.SkipMelonLoader ? 4 : 5;
             Console.WriteLine($"Step {stepNum}: Installing mod files...");
-            modInstallerService.InstallMod(
-                extractedRoot,
-                gamePath,
-                options.Force,
-                Console.WriteLine
-            );
+            modInstallerService.InstallMod(extractedRoot, gamePath, Console.WriteLine);
             Console.WriteLine("Mod files installed.");
             Console.WriteLine();
 
