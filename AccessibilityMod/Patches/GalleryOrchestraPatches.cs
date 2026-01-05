@@ -24,6 +24,7 @@ namespace AccessibilityMod.Patches
         private static FieldInfo _albumTableField;
         private static FieldInfo _playingMusicDataField;
         private static PropertyInfo _isPlayingMusicProperty;
+        private static FieldInfo _isExecutingField;
 
         // Cached type for nested AlbumTableData
         private static Type _albumTableDataType;
@@ -52,10 +53,23 @@ namespace AccessibilityMod.Patches
                         return false;
                     }
 
-                    // Note: We intentionally do NOT check m_IsExecuting here.
-                    // m_IsExecuting is only set to true after the fade-in animation completes,
-                    // but we want to consider the orchestra active as soon as Play() is called.
-                    // Our _isOrchestraActive flag is set in Play_Postfix and cleared in OnForceClose_Postfix.
+                    // Check if the orchestra was initialized but is no longer executing.
+                    // This detects normal close (B button) which sets m_IsExecuting = false
+                    // but doesn't trigger OnForceClose. During opening animation, both
+                    // IsInit and m_IsExecuting are false, so we only clear when IsInit is true.
+                    if (instance.IsInit)
+                    {
+                        EnsureReflectionCache();
+                        if (_isExecutingField != null)
+                        {
+                            var isExecuting = (bool)_isExecutingField.GetValue(instance);
+                            if (!isExecuting)
+                            {
+                                _isOrchestraActive = false;
+                                return false;
+                            }
+                        }
+                    }
 
                     return true;
                 }
@@ -86,6 +100,7 @@ namespace AccessibilityMod.Patches
                 "IsPlayingMusic",
                 BindingFlags.NonPublic | BindingFlags.Instance
             );
+            _isExecutingField = orchestraType.GetField("m_IsExecuting", flags);
 
             // Get nested AlbumTableData type
             _albumTableDataType = orchestraType.GetNestedType(
