@@ -15,6 +15,7 @@ namespace AccessibilityMod.Services
         private static bool _wasActive = false;
         private static bool _lastIsSlider = false;
         private static float _lastStableBgPosX = float.NaN;
+
         // Max X of hotspots BEFORE any half-screen filtering (used to detect wide scenes reliably)
         private static float _lastUnfilteredHotspotMaxX = 1920f;
 
@@ -57,7 +58,8 @@ namespace AccessibilityMod.Services
                         // When slider finishes (half-screen pan completes), refresh hotspot list so it
                         // only contains the current visible half.
                         bool isSlider = bg.is_slider;
-                        if (float.IsNaN(_lastStableBgPosX)) _lastStableBgPosX = x;
+                        if (float.IsNaN(_lastStableBgPosX))
+                            _lastStableBgPosX = x;
                         if (_lastIsSlider && !isSlider)
                         {
                             if (Math.Abs(x - _lastStableBgPosX) > 0.5f)
@@ -65,11 +67,17 @@ namespace AccessibilityMod.Services
                                 _lastStableBgPosX = x;
                                 RefreshHotspots();
                                 // Announce side, hotspot count, and unexamined count after switching
-                                string side = x < 960f 
-                                    ? L.Get("investigation.side_left") 
-                                    : L.Get("investigation.side_right");
+                                string side =
+                                    x < 960f
+                                        ? L.Get("investigation.side_left")
+                                        : L.Get("investigation.side_right");
                                 int unexamined = _hotspots.Count(h => !h.IsExamined);
-                                string message = L.Get("investigation.scene_switched_info", side, _hotspots.Count, unexamined);
+                                string message = L.Get(
+                                    "investigation.scene_switched_info",
+                                    side,
+                                    _hotspots.Count,
+                                    unexamined
+                                );
                                 SpeechManager.Announce(message, GameTextType.Investigation);
                             }
                         }
@@ -162,8 +170,10 @@ namespace AccessibilityMod.Services
                 // Capture max X BEFORE filtering (so OnInvestigationStart can know this is a wide scene)
                 try
                 {
-                    _lastUnfilteredHotspotMaxX = _hotspots.Count > 0 ? _hotspots.Max(h => h.CenterX) : 1920f;
-                    if (_lastUnfilteredHotspotMaxX < 1920f) _lastUnfilteredHotspotMaxX = 1920f;
+                    _lastUnfilteredHotspotMaxX =
+                        _hotspots.Count > 0 ? _hotspots.Max(h => h.CenterX) : 1920f;
+                    if (_lastUnfilteredHotspotMaxX < 1920f)
+                        _lastUnfilteredHotspotMaxX = 1920f;
                 }
                 catch
                 {
@@ -190,7 +200,11 @@ namespace AccessibilityMod.Services
                         }
                     }
                     catch { }
-                    try { canSlide = GSMain_TanteiPart.IsBGSlide(bgNo); } catch { }
+                    try
+                    {
+                        canSlide = GSMain_TanteiPart.IsBGSlide(bgNo);
+                    }
+                    catch { }
 
                     // Some versions/scenes don't populate bgCtrl.sprite_data reliably.
                     // Derive an effective width from the inspection data coordinates (game data),
@@ -200,7 +214,8 @@ namespace AccessibilityMod.Services
                         if (_hotspots.Count > 0)
                         {
                             float dataMaxX = _hotspots.Max(h => h.CenterX);
-                            if (dataMaxX > bgWidth) bgWidth = dataMaxX;
+                            if (dataMaxX > bgWidth)
+                                bgWidth = dataMaxX;
                         }
                     }
                     catch { }
@@ -209,7 +224,9 @@ namespace AccessibilityMod.Services
                     {
                         float minX = bgPosX;
                         float maxX = bgPosX + 1920f;
-                        _hotspots = _hotspots.Where(h => h.CenterX >= minX && h.CenterX <= maxX).ToList();
+                        _hotspots = _hotspots
+                            .Where(h => h.CenterX >= minX && h.CenterX <= maxX)
+                            .ToList();
                     }
                 }
 
@@ -491,10 +508,10 @@ namespace AccessibilityMod.Services
             if (_hotspots.Count > 0)
             {
                 int unexamined = _hotspots.Count(h => !h.IsExamined);
-                
+
                 // Start with mode name
                 string message = L.Get("investigation.mode_start");
-                
+
                 // Check if we need Q-switch hint and determine current side
                 bool shouldHintQ = false;
                 string sideHint = "";
@@ -513,7 +530,11 @@ namespace AccessibilityMod.Services
                         }
                     }
                     catch { }
-                    try { canSlide = GSMain_TanteiPart.IsBGSlide(bgNo); } catch { }
+                    try
+                    {
+                        canSlide = GSMain_TanteiPart.IsBGSlide(bgNo);
+                    }
+                    catch { }
                     // Use the unfiltered max X captured in RefreshHotspots() (do not use filtered list)
                     effectiveWidth = _lastUnfilteredHotspotMaxX;
 
@@ -524,9 +545,10 @@ namespace AccessibilityMod.Services
                         // Determine which side we're currently on
                         // bg_pos_x < 960 means left side (showing X coordinates 0-1920)
                         // bg_pos_x >= 960 means right side (showing X coordinates 1920+)
-                        sideHint = bgPosX < 960f 
-                            ? L.Get("investigation.current_side_left") 
-                            : L.Get("investigation.current_side_right");
+                        sideHint =
+                            bgPosX < 960f
+                                ? L.Get("investigation.current_side_left")
+                                : L.Get("investigation.current_side_right");
                         message += " " + sideHint;
                     }
                 }
@@ -534,19 +556,19 @@ namespace AccessibilityMod.Services
                 {
                     // ignore
                 }
-                
+
                 // Add points count
                 message += " " + L.Get("investigation.points_count", _hotspots.Count);
-                
+
                 // Add unexamined count if any
                 if (unexamined > 0)
                 {
                     message += " " + L.Get("investigation.unexamined_count", unexamined);
                 }
-                
+
                 // Add controls hint
                 message += " " + L.Get("investigation.controls_hint");
-                
+
                 // Add Q-switch hint if needed
                 if (shouldHintQ)
                 {

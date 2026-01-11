@@ -289,8 +289,12 @@ namespace AccessibilityMod.Services
                                 }
                             }
                             catch { }
-                            try { canSlide = GSMain_TanteiPart.IsBGSlide(bgNo); } catch { }
-                            
+                            try
+                            {
+                                canSlide = GSMain_TanteiPart.IsBGSlide(bgNo);
+                            }
+                            catch { }
+
                             // Calculate effective width from hotspot data
                             try
                             {
@@ -304,8 +308,10 @@ namespace AccessibilityMod.Services
                                             break;
                                         if (data.place == 254)
                                             continue;
-                                        float centerX = (data.x0 + data.x1 + data.x2 + data.x3) / 4f;
-                                        if (centerX > maxX) maxX = centerX;
+                                        float centerX =
+                                            (data.x0 + data.x1 + data.x2 + data.x3) / 4f;
+                                        if (centerX > maxX)
+                                            maxX = centerX;
                                     }
                                     effectiveWidth = maxX;
                                 }
@@ -319,9 +325,10 @@ namespace AccessibilityMod.Services
                                 // Determine which side we're currently on
                                 // bg_pos_x < 960 means left side (showing X coordinates 0-1920)
                                 // bg_pos_x >= 960 means right side (showing X coordinates 1920+)
-                                side = bgPosX < 960f 
-                                    ? L.Get("investigation.side_left") 
-                                    : L.Get("investigation.side_right");
+                                side =
+                                    bgPosX < 960f
+                                        ? L.Get("investigation.side_left")
+                                        : L.Get("investigation.side_right");
                             }
                         }
                         catch { }
@@ -329,7 +336,12 @@ namespace AccessibilityMod.Services
                         if (shouldShowSide)
                         {
                             // Use format with side information
-                            stateInfo = L.Get("investigation.state_with_side", side, hotspotCount, unexaminedCount);
+                            stateInfo = L.Get(
+                                "investigation.state_with_side",
+                                side,
+                                hotspotCount,
+                                unexaminedCount
+                            );
                         }
                         else
                         {

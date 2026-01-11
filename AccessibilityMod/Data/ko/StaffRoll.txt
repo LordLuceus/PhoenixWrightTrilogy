@@ -1,0 +1,40 @@
+# Staff Roll Credits for GS1 Episode 5
+# Each line (non-comment) corresponds to one staff credit image, in display order.
+# Empty lines will be silent. Lines starting with # are comments.
+# Format: "Job Title: Name" or just the text content of the image.
+# Press F5 in-game to reload after making changes.
+#
+# Note: The staff roll images show these credits visually.
+# You may need to adjust the text below to match what appears in your game.
+# The number of entries should match the number of staff roll images (28 for English).
+
+Planning/Script/Director: Shu Takumi
+Planning: Takeshi Yamazaki
+Design: Kazuya Nuri
+
+Art: Yasuaki Kishimoto, Tetsuya Enomoto
+Art: Koujirou Ogiwara, Hirochika Nagaki
+Animation: Kouta Fukamachi, Takanori Ishikawa
+
+Graphics: Shuichi Muramoto, Kiyoko Takeda, Yasuhiro Morita
+Graphics: Kouji Aoki, Chie Nakajima, Toshihiko Yamamoto
+
+Programming: Fumiaki Sato
+Programming: Hitoshi Sakai, Shiro Mikata, Daisuke Kaneko
+
+Sound: Akemi Kimura
+
+Localization: Ben Judd
+Localization: Brandon Gay, Kaori Funakoshi
+
+Translation: Bowne Global Solutions
+Translation: J. Patrick Riley, Yuli Kim, Steve Anderson
+Translation: Yoko Muto, Alexander O. Smith, Philip Soldini
+
+Special Thanks: Kimio Yamazoe, Ayatomo Tanimoto, Tatsuya Yoshikawa
+Special Thanks: Keiji Kubori, Tomohiro Masuda, Setsuo Yamamoto
+Special Thanks: Hideaki Katagiri, Miho Kobayashi
+Special Thanks: Kentaro Ohira, Ryohei Koyama
+
+Producer: Minae Matsukawa
+Executive Producer: Tatsuya Minami

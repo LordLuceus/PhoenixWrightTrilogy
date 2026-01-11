@@ -1,8 +1,8 @@
 using System;
 using AccessibilityMod.Core;
 using AccessibilityMod.Services;
-using HarmonyLib;
 using AccessibilityMod.Utilities;
+using HarmonyLib;
 using MelonAccessibilityLib;
 
 namespace AccessibilityMod.Patches
@@ -78,20 +78,21 @@ namespace AccessibilityMod.Patches
 
                 // Get current cursor sprite number via reflection or by checking the sprite
                 int currentSprite = GetCursorSpriteNumber(__instance);
-                
+
                 // Get current cursor position
                 float currentPosX = __instance.pos_x;
                 float currentPosY = __instance.pos_y;
-                
+
                 // Check if cursor position has changed (indicating user moved the cursor with arrow keys)
                 bool cursorMoved = false;
                 if (!float.IsNaN(_lastCursorPosX) && !float.IsNaN(_lastCursorPosY))
                 {
                     // Consider it moved if position changed by more than 0.1 pixels (to handle floating point precision)
-                    cursorMoved = Math.Abs(currentPosX - _lastCursorPosX) > 0.1f || 
-                                  Math.Abs(currentPosY - _lastCursorPosY) > 0.1f;
+                    cursorMoved =
+                        Math.Abs(currentPosX - _lastCursorPosX) > 0.1f
+                        || Math.Abs(currentPosY - _lastCursorPosY) > 0.1f;
                 }
-                
+
                 // Check for edge collision: if arrow key is pressed but cursor didn't move, we hit an edge
                 if (!float.IsNaN(_lastCursorPosX) && !float.IsNaN(_lastCursorPosY) && !cursorMoved)
                 {
@@ -101,10 +102,11 @@ namespace AccessibilityMod.Patches
                         // Check if any arrow key is being held down
                         if (padCtrl.instance != null)
                         {
-                            directionKeyPressed = padCtrl.instance.GetKey(KeyType.Up) ||
-                                                 padCtrl.instance.GetKey(KeyType.Down) ||
-                                                 padCtrl.instance.GetKey(KeyType.Left) ||
-                                                 padCtrl.instance.GetKey(KeyType.Right);
+                            directionKeyPressed =
+                                padCtrl.instance.GetKey(KeyType.Up)
+                                || padCtrl.instance.GetKey(KeyType.Down)
+                                || padCtrl.instance.GetKey(KeyType.Left)
+                                || padCtrl.instance.GetKey(KeyType.Right);
                         }
                     }
                     catch { }
@@ -118,7 +120,7 @@ namespace AccessibilityMod.Patches
                         );
                     }
                 }
-                
+
                 // Update position tracking
                 _lastCursorPosX = currentPosX;
                 _lastCursorPosY = currentPosY;
@@ -149,7 +151,7 @@ namespace AccessibilityMod.Patches
                             if ((previousSprite == 1 || previousSprite == 3) && cursorMoved)
                             {
                                 SpeechManager.Announce(
-                                    L.Get("investigation.left_point_of_interest"),
+                                    L.Get("investigation.Out_of_point_of_interest"),
                                     GameTextType.Investigation
                                 );
                             }

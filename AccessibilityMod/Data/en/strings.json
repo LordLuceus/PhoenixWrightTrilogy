@@ -90,7 +90,7 @@
   "investigation.point_unexamined": "unexamined",
   "investigation.point_of_interest": "Point of interest",
   "investigation.already_examined": "Already examined",
-  "investigation.left_point_of_interest": "Left point of interest",
+  "investigation.Out_of_point_of_interest": "Out of point",
   "investigation.scene_switched_count": "{0} points of interest",
   "investigation.side_left": "Left side",
   "investigation.side_right": "Right side",

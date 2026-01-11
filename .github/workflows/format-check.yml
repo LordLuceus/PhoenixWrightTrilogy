@@ -1,0 +1,24 @@
+name: Format Check
+
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [master]
+
+jobs:
+  csharpier:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Install CSharpier
+        run: dotnet tool restore
+
+      - name: Check formatting
+        run: dotnet csharpier check .

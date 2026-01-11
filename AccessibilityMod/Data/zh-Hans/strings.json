@@ -90,7 +90,7 @@
   "investigation.point_unexamined": "未调查",
   "investigation.point_of_interest": "可调查点",
   "investigation.already_examined": "调查完毕",
-  "investigation.left_point_of_interest": "不在调查点",
+  "investigation.Out_of_point_of_interest": "调查点外",
   "investigation.scene_switched_count": "{0}调查点",
   "investigation.side_left": "左侧",
   "investigation.side_right": "右侧",
