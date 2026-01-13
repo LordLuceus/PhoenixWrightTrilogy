@@ -173,6 +173,36 @@ namespace AccessibilityMod.Patches
         #region Message Board Hooks
 
         /// <summary>
+        /// Hook when message board is about to close. Captures dialogue that might be
+        /// missed by other hooks (e.g., when dialogue advances quickly without showing
+        /// the arrow or guide icons).
+        /// Skips when in court record/evidence details modes to prevent stale dialogue.
+        /// </summary>
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(messageBoardCtrl), "board")]
+        public static void Board_Prefix(messageBoardCtrl __instance, bool in_board, bool in_mes)
+        {
+            try
+            {
+                // Only capture when board is about to close while still active
+                if (!in_board && __instance.body_active)
+                {
+                    // Skip when message board text is stale (court record, evidence details, 3D evidence)
+                    if (IsInStaleDialogueMode())
+                        return;
+
+                    TryOutputDialogue("Board_Prefix");
+                }
+            }
+            catch (Exception ex)
+            {
+                AccessibilityMod.Core.AccessibilityMod.Logger?.Error(
+                    $"Error in Board_Prefix patch: {ex.Message}"
+                );
+            }
+        }
+
+        /// <summary>
         /// Hook when message board opens/closes. Reset speaker tracking when closed.
         /// Note: We intentionally do NOT reset _lastAnnouncedText here because the board
         /// can close and reopen briefly during cross-examination (when pressing statements),
@@ -469,6 +499,33 @@ namespace AccessibilityMod.Patches
                         $"[DialoguePatches:{source}] Skipped duplicate: \"{preview}\""
                     );
 #endif
+                    return;
+                }
+
+                // Check if this is a continuation of previously announced text
+                // This happens when animations pause mid-sentence: we announce the partial,
+                // then when the full line is ready, we only announce the new part
+                if (
+                    !Net35Extensions.IsNullOrWhiteSpace(_lastAnnouncedText)
+                    && text.StartsWith(_lastAnnouncedText)
+                )
+                {
+                    string continuation = text.Substring(_lastAnnouncedText.Length).TrimStart();
+                    _lastAnnouncedText = text;
+
+                    if (!Net35Extensions.IsNullOrWhiteSpace(continuation))
+                    {
+                        // Replace button placeholders in continuation
+                        continuation = ReplaceButtonPlaceholders(ctrl, continuation);
+
+#if DEBUG
+                        AccessibilityMod.Core.AccessibilityMod.Logger?.Msg(
+                            $"[DialoguePatches:{source}] Continuation: \"{continuation}\""
+                        );
+#endif
+                        // Output just the continuation (no speaker name - same speaker continues)
+                        SpeechManager.Output("", continuation, GameTextType.Dialogue);
+                    }
                     return;
                 }
 
