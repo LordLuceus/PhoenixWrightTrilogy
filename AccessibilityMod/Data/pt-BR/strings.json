@@ -317,7 +317,7 @@
   "psyche_lock.broken_remaining.one": "Trava quebrada! {0} trava restante",
   "psyche_lock.broken_remaining.other": "Trava quebrada! {0} travas restantes",
   "psyche_lock.all_broken": "Todas as Psicotravas quebradas! Segredo revelado!",
-  "psyche_lock.topic_locked": "(trancado)",
+  "psyche_lock.topic_locked": "(travado)",
 
   "_section_menu": "=== Anúncios de Menu ===",
   "menu.main_menu": "Menu principal: {0}",
